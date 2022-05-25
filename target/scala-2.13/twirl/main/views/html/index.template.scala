@@ -37,6 +37,7 @@ Seq[Any](format.raw/*2.1*/("""
     <p class="lead">
       A demo project based off the <a href="https://github.com/miranda-hawkes/induction-tutorials/blob/master/Building-A-RESTful-API-With-Scala-Play/README.md"> Building a RESTful API with Scala and Play </a> tutorial.
     </p>
+    <p>Welcome to Play</p>
 
     <p class="lead mb-5">This project is deployed via Heroku.</p>
 
@@ -104,7 +105,7 @@ Seq[Any](format.raw/*2.1*/("""
   </div>
 
 </div>
-""")))}),format.raw/*83.2*/("""
+""")))}),format.raw/*84.2*/("""
 """))
       }
     }
@@ -121,11 +122,11 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: 2022-05-25T12:48:33.407
+                  DATE: 2022-05-25T13:21:51.153
                   SOURCE: /Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/app/views/index.scala.html
-                  HASH: 5497a12eba0b5213723c306a69b4918019aed905
-                  MATRIX: 722->1|818->4|845->6|880->33|919->35|947->37|3096->2156
-                  LINES: 21->1|26->2|27->3|27->3|27->3|29->5|107->83
+                  HASH: 1b61555355c011c1b459eae6c1e8e7d831765063
+                  MATRIX: 722->1|818->4|845->6|880->33|919->35|947->37|3123->2183
+                  LINES: 21->1|26->2|27->3|27->3|27->3|29->5|108->84
                   -- GENERATED --
               */
           

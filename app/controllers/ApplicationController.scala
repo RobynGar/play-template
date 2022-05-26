@@ -1,10 +1,10 @@
 package controllers
 
 import play.api.mvc.{BaseController, ControllerComponents}
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
 // to get this page on 9000 http://localhost:9000/api/
-//@Singleton
+@Singleton
 class ApplicationController @Inject()(val controllerComponents: ControllerComponents) extends BaseController{
 
   def index() = TODO

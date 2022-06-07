@@ -36,6 +36,7 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
     collection.find(byID(id)).headOption flatMap {
       case Some(data) =>
         Future(data)
+
     }
 
   def update(id: String, book: DataModel): Future[result.UpdateResult] =

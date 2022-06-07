@@ -19,7 +19,8 @@ class ApplicationControllerSpec extends BaseSpecWithApplication{
 
   val TestApplicationController = new ApplicationController(
     component,
-    repository
+    repository,
+    service
   )
   private val dataModel: DataModel = DataModel(
     "abcd",
@@ -101,6 +102,19 @@ class ApplicationControllerSpec extends BaseSpecWithApplication{
       status(createdResult) shouldBe Status.CREATED
       status(updateResult) shouldBe Status.ACCEPTED
       //contentAsJson(updateResult).as[DataModel] shouldBe DataModel("abcd", "updated test name", "test description", 100) //this will not work as we are not returning the updates result in the body of accepted action
+    }
+    afterEach()
+  }
+
+  "ApplicationController .update()" should {
+    beforeEach()
+    "try update a book by an id that does not exist and non conforming body format" in {
+
+      val updateRequest = buildPut("/api/4").withBody[JsValue](Json.obj())
+
+      val updateResult = TestApplicationController.update("4")(updateRequest)
+
+      status(updateResult) shouldBe Status.BAD_REQUEST
     }
     afterEach()
   }

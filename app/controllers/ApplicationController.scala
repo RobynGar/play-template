@@ -4,12 +4,14 @@ import models.DataModel
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 import repositories.DataRepository
+import services.ApplicationService
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
-class ApplicationController @Inject()(val controllerComponents: ControllerComponents, val dataRepository: DataRepository)(implicit val ec: ExecutionContext) extends BaseController {
+class ApplicationController @Inject()(val controllerComponents: ControllerComponents, val dataRepository: DataRepository, val applicationService: ApplicationService)(implicit val ec: ExecutionContext) extends BaseController {
 //implicit executive context is used for async operations like map/flatMap. executionContext is another name for ThreadPool
   def index(): Action[AnyContent] = Action.async { implicit request =>
     val books: Future[Seq[DataModel]] = dataRepository.collection.find().toFuture()
@@ -48,7 +50,10 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
     Future(Accepted)
   }
 
-
+  def getGoogleBook(search: String, term: String): Action[AnyContent] = Action.async { implicit request =>
+    val books = applicationService.getGoogleBook(search = search, term = term)
+    books.map(items => Json.toJson(items)).map(result => Ok(result))
+  }
 
 }
 

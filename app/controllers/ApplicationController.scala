@@ -29,7 +29,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   def read(id: String): Action[AnyContent] = Action.async { implicit request =>
      dataRepository.read(id).map{
       //case book if(book.isInstanceOf[DataModel]) => Ok(Json.toJson(book)) //this or the line underneath seem to work with the happy path test but not with error
-      case book: DataModel => Ok(DataModel.formats.writes(book))
+      case book: DataModel if(book._id == id)=> Ok(DataModel.formats.writes(book))
       case _ => BadRequest
     }
      //books.map(items => Json.toJson(items)).map(result => Ok(result))
@@ -55,8 +55,11 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 
 
   def getGoogleBook(search: String, term: String): Action[AnyContent] = Action.async { implicit request =>
-    val books = libraryService.getGoogleBook(search = search, term = term)
-    books.map(items => Json.toJson(items)).map(result => Ok(result))
+   libraryService.getGoogleBook(search = search, term = term).value.map{
+     case Right(book) => Ok(DataModel.formats.writes(book)) //(items => Json.toJson(items)).map(result => Ok(result))
+     case Left(error) => BadRequest
+   }
+
   }
 
 }

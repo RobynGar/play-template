@@ -32,6 +32,8 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
       Filters.equal("_id", id)
     )
 
+ // val emptyBook = classOf[DataModel].newInstance()
+
   def read(id: String) = {
     collection.find(byID(id)).headOption flatMap {
       case Some(data) =>

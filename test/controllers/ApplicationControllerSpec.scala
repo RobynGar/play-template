@@ -98,7 +98,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication{
     }
 
   }
-  
+
 
   "ApplicationController .update()" should {
 

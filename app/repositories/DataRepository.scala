@@ -32,12 +32,13 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
       Filters.equal("_id", id)
     )
 
-  def read(id: String): Future[DataModel] =
+  def read(id: String) = {
     collection.find(byID(id)).headOption flatMap {
       case Some(data) =>
         Future(data)
-
+      case _ => Future(1)
     }
+  }
 
   def update(id: String, book: DataModel): Future[result.UpdateResult] =
     collection.replaceOne(
@@ -46,10 +47,12 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
       options = new ReplaceOptions().upsert(true) //What happens when we set this to false?
     ).toFuture()
 
-  def delete(id: String): Future[result.DeleteResult] =
+  def delete(id: String): Future[result.DeleteResult] = {
     collection.deleteOne(
-      filter = byID(id)
+        filter = byID(id)
     ).toFuture()
+
+  }
 
   def deleteAll(): Future[Unit] = collection.deleteMany(empty()).toFuture().map(_ => ()) //Hint: needed for tests
 

@@ -40,24 +40,30 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
 
  // val emptyBook = classOf[DataModel].newInstance()
 
-  def read(id: String): Future[Product] = {
+  def read(id: String): Future[Either[APIError, DataModel]] = {
     collection.find(byID(id)).headOption flatMap {
       case Some(data) =>
-        Future(data)
-     // case _ => Future(APIError.BadAPIResponse(500, "Could not connect"))
+        Future(Right(data))
+      case _ => Future(Left(APIError.BadAPIResponse(500, "Could not connect")))
     }
   }
 
-  def update(id: String, book: DataModel): Future[result.UpdateResult] =
+  def update(id: String, book: DataModel): Future[Either[APIError, DataModel]] =
     collection.replaceOne(
       filter = byID(id),
       replacement = book,
       options = new ReplaceOptions().upsert(true) //What happens when we set this to false?
-    ).toFuture()
+    ).toFuture().map{
+      case value if(value.wasAcknowledged().equals(true)) => Right(book)
+      case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
+    }
 
-  def delete(id: String): Future[result.DeleteResult] = {
+  def delete(id: String): Future[Either[APIError, Int]] = {
     collection.deleteOne(
-        filter = byID(id)).toFuture()
+        filter = byID(id)).toFuture().map{
+      case value if(value.wasAcknowledged().equals(true)) => Right(1)
+      case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
+    }
   }
 
   def deleteAll(): Future[Unit] = collection.deleteMany(empty()).toFuture().map(_ => ())

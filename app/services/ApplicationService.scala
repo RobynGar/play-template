@@ -5,7 +5,7 @@ import models.{APIError, DataModel}
 import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters
 import org.mongodb.scala.result
-import play.api.libs.json.{JsObject, JsValue}
+import play.api.libs.json.{JsError, JsObject, JsSuccess, JsValue}
 import play.api.mvc.Request
 import repositories.DataRepository
 
@@ -27,12 +27,12 @@ class ApplicationService @Inject()(val dataRepository: DataRepository)(implicit 
 //    }
 //  }
 
-  def create(input: Request[JsValue]): Either[APIError, Future[DataModel]] = {
-    try{
-      Right(dataRepository.create(input.body.validate[DataModel].get))
-    } catch{
-        case _: Exception => Left(APIError.BadAPIResponse(415, "Could not make book"))
+  def create(input: Request[JsValue]): Future[Either[APIError, DataModel]] = {
+    input.body.validate[DataModel] match {
+      case JsSuccess(value, _) => dataRepository.create(value)
+      case JsError(errors) => Future(Left(APIError.BadAPIResponse(400, errors.toString())))
     }
+
   }
 
 

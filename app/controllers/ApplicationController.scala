@@ -19,10 +19,10 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
     books.map(items => Json.toJson(items)).map(result => Ok(result))
   }
 
-  def create(): Either[APIError, String] = Action.async(parse.json) { implicit request =>
+  def create(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     applicationService.create(request).map {
-      case Right(book: DataModel) => Created
-      case Left(error: APIError) => error
+      case Right(value) => Created(Json.toJson(value))
+      case Left(error) => Status(error.httpResponseStatus)
     }
   }
 

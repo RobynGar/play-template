@@ -1,12 +1,16 @@
 package controllers
 
 import baseSpec.BaseSpecWithApplication
-import models.DataModel
+import cats.data.EitherT
+import models.{APIError, DataModel}
+import org.scalamock.scalatest.MockFactory
+import org.scalatest.concurrent.ScalaFutures
 import play.api.test.FakeRequest
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContentAsEmpty, Result}
 import play.api.test.Helpers.{POST, contentAsJson, defaultAwaitTimeout, route, status}
+import services.ApplicationService
 
 import scala.concurrent.Future
 
@@ -14,13 +18,15 @@ import scala.concurrent.Future
 
 
 
-class ApplicationControllerSpec extends BaseSpecWithApplication{
+class ApplicationControllerSpec extends BaseSpecWithApplication with MockFactory with ScalaFutures{
 
-
+  val mockServiceLayer = mock[ApplicationService]
   val TestApplicationController = new ApplicationController(
     component,
     repository,
+    mockServiceLayer,
     service
+
   )
   private val dataModel: DataModel = DataModel(
     "abcd",
@@ -37,6 +43,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication{
 
 
 
+
   "ApplicationController .index" should {
 
     val result = TestApplicationController.index()(FakeRequest())
@@ -48,29 +55,26 @@ class ApplicationControllerSpec extends BaseSpecWithApplication{
   }
 
   "ApplicationController .create()" should {
-    beforeEach()
-    val request: FakeRequest[JsValue] = buildPost("/api/create").withBody[JsValue](Json.toJson(dataModel))
-    val createdResult: Future[Result] = TestApplicationController.create()(request)
 
     "create a book in the database" in {
+      beforeEach()
+      (mockServiceLayer.create(FakeRequest[DataModel]))
+      val request: FakeRequest[JsValue] = buildPost("/api/create").withBody[JsValue](Json.toJson(dataModel))
+      val createdResult: Future[Result] = TestApplicationController.create()(request)
 
-      status(createdResult) shouldBe Status.CREATED
+      status(createdResult) shouldBe Right(Status.CREATED)
+      afterEach()
     }
-    afterEach()
-  }
-
-  "ApplicationController .create()" should {
-    beforeEach()
-    val request = buildPost("/api/create").withBody[JsValue](Json.obj())
-    val createdResult = TestApplicationController.create()(request)
 
     "try to create a book in the database with wrong format" in {
-
-      status(createdResult) shouldBe Status.BAD_REQUEST
+      beforeEach()
+      val request = buildPost("/api/create").withBody[JsValue](Json.obj())
+      val createdResult = TestApplicationController.create()(request)
+      status(createdResult) shouldBe Status.UNSUPPORTED_MEDIA_TYPE
+      afterEach()
     }
-    afterEach()
-  }
 
+  }
 
   "ApplicationController .read()" should {
 
@@ -115,10 +119,6 @@ class ApplicationControllerSpec extends BaseSpecWithApplication{
       afterEach()
     }
 
-  }
-
-  "ApplicationController .update()" should {
-
     "try update a book by an id that does not exist and non conforming body format" in {
       beforeEach()
       val updateRequest = buildPut("/api/4").withBody[JsValue](Json.obj())
@@ -131,10 +131,11 @@ class ApplicationControllerSpec extends BaseSpecWithApplication{
 
   }
 
-  "ApplicationController .delete()" should {
-    beforeEach()
-      "find a book in the database by id and delete" in {
 
+  "ApplicationController .delete()" should {
+
+      "find a book in the database by id and delete" in {
+        beforeEach()
         val request: FakeRequest[JsValue] = buildPost("/api").withBody[JsValue](Json.toJson(dataModel))
         val deleteRequest: FakeRequest[AnyContentAsEmpty.type ] = buildDelete("/api/:id")
         val createdResult: Future[Result] = TestApplicationController.create()(request)
@@ -142,26 +143,24 @@ class ApplicationControllerSpec extends BaseSpecWithApplication{
 
         status(createdResult) shouldBe Status.CREATED
         status(deleteResult) shouldBe Status.ACCEPTED
-
+        afterEach()
       }
-    afterEach()
+
+    "cannot find a book in the database as id and cannot delete" in {
+      beforeEach()
+      val deleteRequest: FakeRequest[AnyContentAsEmpty.type] = buildDelete("/api/8")
+
+      val deleteResult: Future[Result] = TestApplicationController.delete("8")(deleteRequest)
+
+      status(deleteResult) shouldBe Status.BAD_REQUEST
+      afterEach()
+    }
 
   }
 
-//  "ApplicationController .delete()" should {
-//    beforeEach()
-//    "cannot find a book in the database as id and cannot delete" in {
-//
-//      val deleteRequest: FakeRequest[AnyContentAsEmpty.type] = buildDelete("/api/8")
-//
-//      val deleteResult: Future[Result] = TestApplicationController.delete("8")(deleteRequest)
-//
-//      status(deleteResult) shouldBe Status.BAD_REQUEST
-//
-//    }
-//    afterEach()
-//
-//  }
+
+
+
 
 
   override def beforeEach(): Unit = repository.deleteAll()

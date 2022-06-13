@@ -19,10 +19,10 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
     books.map(items => Json.toJson(items)).map(result => Ok(result))
   }
 
-  def create(): Either[APIError, String] = Action.async(parse.json) { implicit request =>
+  def create(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     applicationService.create(request).map {
-      case Right(book: DataModel) => Created
-      case Left(error: APIError) => error
+      case Right(value) => Created(Json.toJson(value))
+      case Left(error) => Status(error.httpResponseStatus)
     }
   }
 
@@ -33,10 +33,10 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 //    }
 
 
-  def read(id: String): Either [APIError, DataModel] = Action.async { implicit request =>
+  def read(id: String): Action[AnyContent] = Action.async { implicit request =>
     applicationService.read(id).map{
-      case book: DataModel => Ok(DataModel.formats.writes(book))
-      case error => NotFound
+      case Right(book: DataModel) => Ok(DataModel.formats.writes(book))
+      case Left(error) => Status(error.httpResponseStatus)
     }
 //     dataRepository.read(id).map{
 //      //case book if(book.isInstanceOf[DataModel]) => Ok(Json.toJson(book))
@@ -46,11 +46,12 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 
   }
 
-  def update(id: String) = Action.async(parse.json) { implicit request =>
-      applicationService.update(id, request).map{
-        case Right(book: DataModel) => Accepted
-        case Left(error) => BadRequest(error.reason)
-      }
+  def update(id: String): Action[JsValue] = Action.async(parse.json) { implicit request =>
+    applicationService.update(id, request).map {
+      case Right(book: DataModel) => Accepted(Json.toJson(book))
+      case Left(error) => Status(error.httpResponseStatus)
+    }
+
 
     //    request.body.validate[DataModel] match {
 //      //this is saying look at the body of the request
@@ -68,7 +69,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
     applicationService.delete(id).map{
           //.value after the (id) for the methods in service before i took out the eitherT
       case Right(numDeleted: Int) => Accepted
-      case Left(error: APIError) => NotFound(error.reason)
+      case Left(error: APIError) => Status(error.httpResponseStatus)
     }
 //    dataRepository.delete(id)
 //    Future(Accepted)

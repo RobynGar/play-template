@@ -25,12 +25,12 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
 
   def create(book: DataModel): Future[Either[APIError, DataModel]] =
    try {
-     Right(collection
+     collection
        .insertOne(book)
        .toFuture()
-       .map(_ => book))
+       .map(_ => Right(book))
    } catch {
-     case _: Exception => Left(Future(APIError.BadAPIResponse(415, "Could not make book")))
+     case _: Exception => Left(APIError.BadAPIResponse(415, "Could not make book"))
    }
 
   private def byID(id: String): Bson =

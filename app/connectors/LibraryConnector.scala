@@ -18,7 +18,7 @@ class LibraryConnector @Inject()(ws: WSClient) {
       response.map {
         result =>
           Right(result.json.as[Response])
-      } //first we try to parse the response as a json body if that does not work we move on to recover step
+      } //first we try to parse the response from a json body to a DataModel if that does not work we move on to recover step
         .recover{ case _: WSResponse =>
           Left(APIError.BadAPIResponse(500, "Could not connect"))
         } // this will give us our custom error Future[APIError] telling us it has been unable to get the book we requested

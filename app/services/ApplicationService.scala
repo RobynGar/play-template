@@ -25,7 +25,7 @@ class ApplicationService @Inject()(val dataRepository: DataRepository)(implicit 
   def read(id: String): Future[Either[APIError, DataModel]] =
       dataRepository.read(id).map{
         case Right(book: DataModel) => Right(book)
-        case Left(_: Exception) => Left(APIError.BadAPIResponse(404, "Could not find book"))
+        case Left(errors) => Left(APIError.BadAPIResponse(404, "Could not find book"))
       }
 
 
@@ -38,9 +38,9 @@ class ApplicationService @Inject()(val dataRepository: DataRepository)(implicit 
     }
 
 
-  def delete(id: String): Future[Either[APIError, Int]] = {
+  def delete(id: String): Future[Either[APIError, String]] = {
     dataRepository.delete(id).map{
-      case Right(deleted: Int) => Right(1)
+      case Right(deleted: String) => Right("deleted")
       case Left(error) => Left(APIError.BadAPIResponse(404, "Could not delete book"))
     }
   }

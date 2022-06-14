@@ -1,14 +1,11 @@
 package repositories
 
-import models.APIError.BadAPIResponse
 import models.{APIError, DataModel}
 import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters.empty
 import org.mongodb.scala.model._
-import org.mongodb.scala.result
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
-
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -59,10 +56,11 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
       case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
     }
 
-  def delete(id: String): Future[Either[APIError, Int]] = {
+  def delete(id: String): Future[Either[APIError, String]] = {
     collection.deleteOne(
         filter = byID(id)).toFuture().map{
-      case value if(value.wasAcknowledged().equals(true)) => Right(1)
+      case value if value.getDeletedCount() == 1 => Right("deleted")
+      //case value if value.wasAcknowledged().equals(true) => Right("deleted")
       case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
     }
   }

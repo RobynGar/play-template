@@ -22,7 +22,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   def create(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     applicationService.create(request).map {
       case Right(value) => Created(Json.toJson(value))
-      case Left(error) => Status(error.httpResponseStatus)
+      case Left(error) => BadRequest
     }
   }
 
@@ -36,20 +36,19 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   def read(id: String): Action[AnyContent] = Action.async { implicit request =>
     applicationService.read(id).map{
       case Right(book: DataModel) => Ok(DataModel.formats.writes(book))
-      case Left(error) => Status(error.httpResponseStatus)
+      case Left(error) => BadRequest
     }
 //     dataRepository.read(id).map{
 //      //case book if(book.isInstanceOf[DataModel]) => Ok(Json.toJson(book))
 //      case book: DataModel if(book._id == id)=> Ok(DataModel.formats.writes(book))
 //      case APIError.BadAPIResponse(500, "Could not connect") => BadRequest
 //    }
-
   }
 
   def update(id: String): Action[JsValue] = Action.async(parse.json) { implicit request =>
     applicationService.update(id, request).map {
       case Right(book: DataModel) => Accepted(Json.toJson(book))
-      case Left(error) => Status(error.httpResponseStatus)
+      case Left(error) => BadRequest
     }
 
 
@@ -67,9 +66,9 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 
   def delete(id: String): Action[AnyContent]= Action.async { implicit request =>
     applicationService.delete(id).map{
-          //.value after the (id) for the methods in service before i took out the eitherT
-      case Right(numDeleted: Int) => Accepted
-      case Left(error: APIError) => Status(error.httpResponseStatus)
+      case Right(deleted: String) => Accepted
+      case Left(error) => BadRequest
+
     }
 //    dataRepository.delete(id)
 //    Future(Accepted)

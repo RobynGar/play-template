@@ -1,8 +1,7 @@
 package controllers
 
 import baseSpec.BaseSpecWithApplication
-import cats.data.EitherT
-import models.{APIError, DataModel}
+import models.DataModel
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.ScalaFutures
 import play.api.test.FakeRequest
@@ -18,15 +17,14 @@ import scala.concurrent.Future
 
 
 
-class ApplicationControllerSpec extends BaseSpecWithApplication with MockFactory with ScalaFutures{
+class ApplicationControllerSpec extends BaseSpecWithApplication {
 
-  val mockServiceLayer = mock[ApplicationService]
+  //val mockServiceLayer = mock[ApplicationService]
   val TestApplicationController = new ApplicationController(
     component,
     repository,
-    mockServiceLayer,
+    serviceLayer,
     service
-
   )
   private val dataModel: DataModel = DataModel(
     "abcd",
@@ -40,6 +38,8 @@ class ApplicationControllerSpec extends BaseSpecWithApplication with MockFactory
     "test description",
     100
   )
+
+  //val url = "https://www.googleapis.com/books/v1/volumes?q=rowling%potter"
 
 
 
@@ -58,19 +58,21 @@ class ApplicationControllerSpec extends BaseSpecWithApplication with MockFactory
 
     "create a book in the database" in {
       beforeEach()
-      (mockServiceLayer.create(FakeRequest[DataModel]))
+     // (mockServiceLayer.create _).expects(FakeRequest[JsValue](Json.toJson(dataModel)))
+
       val request: FakeRequest[JsValue] = buildPost("/api/create").withBody[JsValue](Json.toJson(dataModel))
       val createdResult: Future[Result] = TestApplicationController.create()(request)
 
-      status(createdResult) shouldBe Right(Status.CREATED)
-      afterEach()
+      status(createdResult) shouldBe Status.CREATED
+      contentAsJson(createdResult).as[DataModel] shouldBe DataModel("abcd", "test name", "test description", 100)
+
     }
 
     "try to create a book in the database with wrong format" in {
       beforeEach()
       val request = buildPost("/api/create").withBody[JsValue](Json.obj())
       val createdResult = TestApplicationController.create()(request)
-      status(createdResult) shouldBe Status.UNSUPPORTED_MEDIA_TYPE
+      status(createdResult) shouldBe Status.BAD_REQUEST
       afterEach()
     }
 
@@ -87,6 +89,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication with MockFactory
       //val readResult: Future[Result] = TestApplicationController.read("abcd")(FakeRequest()) // works without having readRequest
 
       status(createdResult) shouldBe Status.CREATED
+      contentAsJson(createdResult).as[DataModel] shouldBe DataModel("abcd", "test name", "test description", 100)
       status(readResult) shouldBe Status.OK
       contentAsJson(readResult).as[DataModel] shouldBe DataModel("abcd", "test name", "test description", 100)
       afterEach()
@@ -115,7 +118,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication with MockFactory
 
       status(createdResult) shouldBe Status.CREATED
       status(updateResult) shouldBe Status.ACCEPTED
-      //contentAsJson(updateResult).as[DataModel] shouldBe DataModel("abcd", "updated test name", "test description", 100) //this will not work as we are not returning the updates result in the body of accepted action
+      contentAsJson(updateResult).as[DataModel] shouldBe DataModel("abcd", "updated test name", "test description", 100)
       afterEach()
     }
 
@@ -137,7 +140,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication with MockFactory
       "find a book in the database by id and delete" in {
         beforeEach()
         val request: FakeRequest[JsValue] = buildPost("/api").withBody[JsValue](Json.toJson(dataModel))
-        val deleteRequest: FakeRequest[AnyContentAsEmpty.type ] = buildDelete("/api/:id")
+        val deleteRequest: FakeRequest[AnyContentAsEmpty.type ] = buildDelete("/api/abcd")
         val createdResult: Future[Result] = TestApplicationController.create()(request)
         val deleteResult: Future[Result] = TestApplicationController.delete("abcd")(deleteRequest)
 
@@ -157,9 +160,6 @@ class ApplicationControllerSpec extends BaseSpecWithApplication with MockFactory
     }
 
   }
-
-
-
 
 
 

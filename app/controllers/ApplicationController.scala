@@ -45,6 +45,14 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 //    }
   }
 
+  def readName(name: String): Action[AnyContent] = Action.async { implicit request =>
+    applicationService.readName(name).map{
+      case Right(book: DataModel) => Ok(Json.toJson(book))
+      case Left(error) => BadRequest
+    }
+
+  }
+
   def update(id: String): Action[JsValue] = Action.async(parse.json) { implicit request =>
     applicationService.update(id, request).map {
       case Right(book: DataModel) => Accepted(Json.toJson(book))
@@ -77,7 +85,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 
   def getGoogleBook(search: String, term: String): Action[AnyContent] = Action.async { implicit request =>
    libraryService.getGoogleBook(search = search, term = term).value.map{
-     case Right(book) => Ok(DataModel.formats.writes(book))
+     case Right(book) => Ok(Json.toJson(book))
      case Left(error) => BadRequest
    }
 

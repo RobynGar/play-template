@@ -36,13 +36,26 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
       Filters.equal("_id", id)
     )
 
+  private def byName(name: String): Bson =
+    Filters.and(
+      Filters.equal("name", name)
+    )
+
  // val emptyBook = classOf[DataModel].newInstance()
 
   def read(id: String): Future[Either[APIError, DataModel]] = {
     collection.find(byID(id)).headOption flatMap {
       case Some(data) =>
         Future(Right(data))
-      case _ => Future(Left(APIError.BadAPIResponse(500, "Could not connect")))
+      case _ => Future(Left(APIError.BadAPIResponse(404, "Could not read book")))
+    }
+  }
+
+  def readName(name: String): Future[Either[APIError, DataModel]] = {
+    collection.find(byName(name)).headOption flatMap {
+      case Some(data) =>
+        Future(Right(data))
+      case _ => Future(Left(APIError.BadAPIResponse(404, "Could not read book")))
     }
   }
 

@@ -1,8 +1,3 @@
-[0m[[0m[33mwarn[0m] [0m[0m/Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/app/repositories/DataRepository.scala:42:31: Auto-application to `()` is deprecated. Supply the empty argument list `()` explicitly to invoke method headOption,[0m
-[0m[[0m[33mwarn[0m] [0m[0mor remove the empty argument list from its definition (Java-defined methods are exempt).[0m
-[0m[[0m[33mwarn[0m] [0m[0mIn Scala 3, an unapplied method like this will be eta-expanded into a function.[0m
-[0m[[0m[33mwarn[0m] [0m[0m    collection.find(byID(id)).headOption flatMap {[0m
-[0m[[0m[33mwarn[0m] [0m[0m                              ^[0m
 [0m[[0m[33mwarn[0m] [0m[0m/Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/conf/routes:3:1: Auto-application to `()` is deprecated. Supply the empty argument list `()` explicitly to invoke method index,[0m
 [0m[[0m[33mwarn[0m] [0m[0mor remove the empty argument list from its definition (Java-defined methods are exempt).[0m
 [0m[[0m[33mwarn[0m] [0m[0mIn Scala 3, an unapplied method like this will be eta-expanded into a function.[0m
@@ -19,10 +14,4 @@
 [0m[[0m[33mwarn[0m] [0m[0mor remove the empty argument list from its definition (Java-defined methods are exempt).[0m
 [0m[[0m[33mwarn[0m] [0m[0mIn Scala 3, an unapplied method like this will be eta-expanded into a function.[0m
 [0m[[0m[33mwarn[0m] [0m[0mPOST    /api/create                 controllers.ApplicationController.create[0m
-[0m[[0m[33mwarn[0m] [0m[0m/Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/app/repositories/DataRepository.scala:28:52: comparing values of types Boolean and Boolean using `equals` unsafely bypasses cooperative equality; use `==` instead[0m
-[0m[[0m[33mwarn[0m] [0m[0m         case value if value.wasAcknowledged.equals(true) => Right(book)[0m
-[0m[[0m[33mwarn[0m] [0m[0m                                                   ^[0m
-[0m[[0m[33mwarn[0m] [0m[0m/Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/app/repositories/DataRepository.scala:55:51: comparing values of types Boolean and Boolean using `equals` unsafely bypasses cooperative equality; use `==` instead[0m
-[0m[[0m[33mwarn[0m] [0m[0m      case value if(value.wasAcknowledged().equals(true)) => Right(book)[0m
-[0m[[0m[33mwarn[0m] [0m[0m                                                  ^[0m
-[0m[[0m[33mwarn[0m] [0m[0m7 warnings found[0m
+[0m[[0m[33mwarn[0m] [0m[0mfour warnings found[0m

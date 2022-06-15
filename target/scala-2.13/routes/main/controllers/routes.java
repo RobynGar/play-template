@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/conf/routes
-// @DATE:Mon Jun 06 15:29:42 BST 2022
+// @DATE:Wed Jun 15 09:09:27 BST 2022
 
 package controllers;
 

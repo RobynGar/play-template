@@ -74,12 +74,12 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
 
   def updateField(id: String, fieldName: String, value: String): Future[Either[APIError, String]]= {
     if(fieldName == "numSales"){
-      collection.findOneAndUpdate(equal("_id", id), set(fieldName, value.toInt)).toFuture().map{
-        case value: DataModel => Right("updated")
+      collection.findOneAndUpdate(equal("_id", id), set(fieldName, value.toInt)).toFutureOption().map{
+        case Some(value: DataModel) => Right("updated")
         case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
       }} else{
-    collection.findOneAndUpdate(equal("_id", id), set(fieldName, value)).toFuture().map{
-      case value: DataModel => Right("updated")
+    collection.findOneAndUpdate(equal("_id", id), set(fieldName, value)).toFutureOption().map{
+      case Some(value: DataModel) => Right("updated")
       case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
     }
     }

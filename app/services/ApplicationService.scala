@@ -2,7 +2,7 @@ package services
 
 
 import models.{APIError, DataModel, Field}
-import play.api.libs.json.{JsError, JsSuccess, JsValue}
+import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.Request
 import repositories.DataRepository
 
@@ -12,6 +12,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ApplicationService @Inject()(val dataRepository: DataRepository)(implicit val ec: ExecutionContext) {
+
+
+  def index(): Future[Either[APIError, Seq[JsValue]]] = {
+    dataRepository.collection.find().toFuture().map{
+      case books: Seq[DataModel] => Right(books.map(book => Json.toJson(book)))
+      case _ => Left(APIError.BadAPIResponse(404, "Could not find books"))
+    }
+    }
+
 
 
   def create(input: Request[JsValue]): Future[Either[APIError, DataModel]] = {

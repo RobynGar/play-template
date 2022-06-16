@@ -15,8 +15,14 @@ import scala.concurrent.{ExecutionContext, Future}
 class ApplicationController @Inject()(val controllerComponents: ControllerComponents, val dataRepository: DataRepository, val applicationService: ApplicationService, val libraryService: LibraryService)(implicit val ec: ExecutionContext) extends BaseController {
 //implicit executive context is used for async operations like map/flatMap. executionContext is another name for ThreadPool
   def index(): Action[AnyContent] = Action.async { implicit request =>
-    val books: Future[Seq[DataModel]] = dataRepository.collection.find().toFuture()
-    books.map(items => Json.toJson(items)).map(result => Ok(result))
+    applicationService.index().map{
+      case Right(book: Seq[JsValue]) => Ok(Json.toJson(book))
+      case Left(error) => BadRequest
+    }
+//    val books: Future[Seq[DataModel]] = dataRepository.collection.find().toFuture()
+//    books.map(items => Json.toJson(items)).map(result => Ok(result))
+//
+
   }
 
   def create(): Action[JsValue] = Action.async(parse.json) { implicit request =>

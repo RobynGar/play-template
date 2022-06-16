@@ -4,12 +4,14 @@ import baseSpec.BaseSpecWithApplication
 import models.{DataModel, Field}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.matchers.should.Matchers
 import play.api.test.FakeRequest
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, AnyContentAsEmpty, Result}
-import play.api.test.Helpers.{POST, contentAsJson, defaultAwaitTimeout, route, status}
-import services.ApplicationService
+import play.api.mvc.{AnyContentAsEmpty, Result}
+import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, route, status}
+import repositories.DataRepository
+import services.{ApplicationService, LibraryService}
 
 import scala.concurrent.Future
 
@@ -17,15 +19,28 @@ import scala.concurrent.Future
 
 
 
-class ApplicationControllerSpec extends BaseSpecWithApplication {
+class ApplicationControllerSpec extends BaseSpecWithApplication with MockFactory with Matchers{
 
-  //val mockServiceLayer = mock[ApplicationService]
+  //integration testing
   val TestApplicationController = new ApplicationController(
     component,
     repository,
     serviceLayer,
     service
   )
+
+  //unit testing
+//  val mockServiceLayer: ApplicationService = mock[ApplicationService]
+//  val mockRepository: DataRepository = mock[DataRepository]
+//  val mockService: LibraryService = mock[LibraryService]
+//
+//  val unitTestController = new ApplicationController(
+//    component,
+//    mockRepository,
+//    mockServiceLayer,
+//    mockService
+//  )
+
   private val dataModel: DataModel = DataModel(
     "abcd",
     "testname",
@@ -50,7 +65,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
   //val url = "https://www.googleapis.com/books/v1/volumes?q=rowling%potter"
 
 
-
+//integration testing
 
   "ApplicationController .index" should {
 
@@ -66,13 +81,13 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
 
     "create a book in the database" in {
       beforeEach()
-     // (mockServiceLayer.create _).expects(FakeRequest[JsValue](Json.toJson(dataModel)))
 
       val request: FakeRequest[JsValue] = buildPost("/api/create").withBody[JsValue](Json.toJson(dataModel))
       val createdResult: Future[Result] = TestApplicationController.create()(request)
 
       status(createdResult) shouldBe Status.CREATED
       contentAsJson(createdResult).as[DataModel] shouldBe DataModel("abcd", "testname", "test description", 100)
+      afterEach()
 
     }
 
@@ -230,6 +245,24 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
     }
 
   }
+
+
+//  UNIT TESTING
+
+//  "ApplicationController .read()" should {
+//    "create a book in the database" in {
+//      beforeEach()
+//      //(mockServiceLayer.create _).expects(FakeRequest[JsValue](Json.toJson(dataModel)))
+//      val request: FakeRequest[JsValue] = buildPost("/api/create").withBody[JsValue](Json.toJson(dataModel))
+//      val createdResult: Future[Result] = unitTestController.create()(request)
+//
+//      status(createdResult) shouldBe Status.CREATED
+//      contentAsJson(createdResult).as[DataModel] shouldBe DataModel("abcd", "testname", "test description", 100)
+//
+//      afterEach()
+//    }
+//  }
+
 
 
 

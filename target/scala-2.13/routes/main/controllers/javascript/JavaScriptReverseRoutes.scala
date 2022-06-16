@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/conf/routes
-// @DATE:Wed Jun 15 09:09:27 BST 2022
+// @DATE:Wed Jun 15 16:08:15 BST 2022
 
 import play.api.routing.JavaScriptReverseRoute
 
@@ -17,6 +17,16 @@ package controllers.javascript {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
+  
+    // @LINE:8
+    def updateField: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.ApplicationController.updateField",
+      """
+        function(id0) {
+          return _wA({method:"PUT", url:"""" + _prefix + { _defaultPrefix } + """" + "api/update/" + encodeURIComponent((""" + implicitly[play.api.mvc.PathBindable[String]].javascriptUnbind + """)("id", id0))})
+        }
+      """
+    )
   
     // @LINE:5
     def read: JavaScriptReverseRoute = JavaScriptReverseRoute(
@@ -48,7 +58,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:14
+    // @LINE:15
     def getGoogleBook: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.ApplicationController.getGoogleBook",
       """
@@ -58,7 +68,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:8
+    // @LINE:9
     def delete: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.ApplicationController.delete",
       """
@@ -110,7 +120,7 @@ package controllers.javascript {
   
   }
 
-  // @LINE:11
+  // @LINE:12
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -118,7 +128,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:11
+    // @LINE:12
     def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.versioned",
       """

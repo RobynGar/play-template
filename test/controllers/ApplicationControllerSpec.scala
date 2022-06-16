@@ -28,7 +28,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
   )
   private val dataModel: DataModel = DataModel(
     "abcd",
-    "test name",
+    "testname",
     "test description",
     100
   )
@@ -64,7 +64,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
       val createdResult: Future[Result] = TestApplicationController.create()(request)
 
       status(createdResult) shouldBe Status.CREATED
-      contentAsJson(createdResult).as[DataModel] shouldBe DataModel("abcd", "test name", "test description", 100)
+      contentAsJson(createdResult).as[DataModel] shouldBe DataModel("abcd", "testname", "test description", 100)
 
     }
 
@@ -89,9 +89,9 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
       //val readResult: Future[Result] = TestApplicationController.read("abcd")(FakeRequest()) // works without having readRequest
 
       status(createdResult) shouldBe Status.CREATED
-      contentAsJson(createdResult).as[DataModel] shouldBe DataModel("abcd", "test name", "test description", 100)
+      contentAsJson(createdResult).as[DataModel] shouldBe DataModel("abcd", "testname", "test description", 100)
       status(readResult) shouldBe Status.OK
-      contentAsJson(readResult).as[DataModel] shouldBe DataModel("abcd", "test name", "test description", 100)
+      contentAsJson(readResult).as[DataModel] shouldBe DataModel("abcd", "testname", "test description", 100)
       afterEach()
     }
 
@@ -105,7 +105,31 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
     }
 
   }
+  "ApplicationController .readName()" should {
 
+    "find a book in the database by name" in {
+      beforeEach()
+      val request: FakeRequest[JsValue] = buildPost("/api/create").withBody[JsValue](Json.toJson(dataModel))
+      val readRequest: FakeRequest[AnyContentAsEmpty.type] = buildGet("/api/name/testname")
+      val createdResult: Future[Result] = TestApplicationController.create()(request)
+      val readResult: Future[Result] = TestApplicationController.readName("testname")(readRequest)
+
+      status(createdResult) shouldBe Status.CREATED
+      contentAsJson(createdResult).as[DataModel] shouldBe DataModel("abcd", "testname", "test description", 100)
+      status(readResult) shouldBe Status.OK
+      contentAsJson(readResult).as[DataModel] shouldBe DataModel("abcd", "testname", "test description", 100)
+      afterEach()
+    }
+
+    "cannot find a book in the database as name which does not exist" in {
+      beforeEach()
+      val readRequest: FakeRequest[AnyContentAsEmpty.type] = buildGet("/api/name/jelly")
+      val readResult: Future[Result] = TestApplicationController.read("jelly")(readRequest)
+
+      status(readResult) shouldBe Status.BAD_REQUEST
+      afterEach()
+    }
+  }
 
   "ApplicationController .update()" should {
 

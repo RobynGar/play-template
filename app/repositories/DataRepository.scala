@@ -2,10 +2,13 @@ package repositories
 
 import models.{APIError, DataModel}
 import org.mongodb.scala.bson.conversions.Bson
-import org.mongodb.scala.model.Filters.empty
+import org.mongodb.scala.model.Filters.{empty, equal}
+import org.mongodb.scala.model.Updates.set
 import org.mongodb.scala.model._
+import play.libs.Json
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -61,18 +64,31 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
 
   def update(id: String, book: DataModel): Future[Either[APIError, DataModel]] =
     collection.replaceOne(
-      filter = byID(id),
-      replacement = book,
-      options = new ReplaceOptions().upsert(true) //What happens when we set this to false?
+      filter = byID(id), //selection criteria
+      replacement = book, //replacement document
+      options = new ReplaceOptions().upsert(true) //upsert when true inserts what replacement is = to if no document matches the filter (no matching id) or if does match replaces it with what is in replacement
     ).toFuture().map{
       case value if(value.wasAcknowledged().equals(true)) => Right(book)
       case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
     }
 
+  def updateField(id: String, fieldName: String, value: String): Future[Either[APIError, String]]= {
+    if(fieldName == "numSales"){
+      collection.findOneAndUpdate(equal("_id", id), set(fieldName, value.toInt)).toFuture().map{
+        case value: DataModel => Right("updated")
+        case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
+      }} else{
+    collection.findOneAndUpdate(equal("_id", id), set(fieldName, value)).toFuture().map{
+      case value: DataModel => Right("updated")
+      case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
+    }
+    }
+  }
+
   def delete(id: String): Future[Either[APIError, String]] = {
     collection.deleteOne(
         filter = byID(id)).toFuture().map{
-      case value if value.getDeletedCount() == 1 => Right("deleted")
+      case value if value.getDeletedCount == 1 => Right("deleted")
       //case value if value.wasAcknowledged().equals(true) => Right("deleted")
       case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
     }

@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/conf/routes
-// @DATE:Wed Jun 15 09:09:27 BST 2022
+// @DATE:Wed Jun 15 16:08:15 BST 2022
 
 import play.api.mvc.Call
 
@@ -16,6 +16,12 @@ package controllers {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
+  
+    // @LINE:8
+    def updateField(id:String): Call = {
+      
+      Call("PUT", _prefix + { _defaultPrefix } + "api/update/" + play.core.routing.dynamicString(implicitly[play.api.mvc.PathBindable[String]].unbind("id", id)))
+    }
   
     // @LINE:5
     def read(id:String): Call = {
@@ -35,13 +41,13 @@ package controllers {
       Call("POST", _prefix + { _defaultPrefix } + "api/create")
     }
   
-    // @LINE:14
+    // @LINE:15
     def getGoogleBook(search:String, term:String): Call = {
       
       Call("GET", _prefix + { _defaultPrefix } + "library/google/" + play.core.routing.dynamicString(implicitly[play.api.mvc.PathBindable[String]].unbind("search", search)) + "/" + play.core.routing.dynamicString(implicitly[play.api.mvc.PathBindable[String]].unbind("term", term)))
     }
   
-    // @LINE:8
+    // @LINE:9
     def delete(id:String): Call = {
       
       Call("DELETE", _prefix + { _defaultPrefix } + "api/" + play.core.routing.dynamicString(implicitly[play.api.mvc.PathBindable[String]].unbind("id", id)))
@@ -76,14 +82,14 @@ package controllers {
   
   }
 
-  // @LINE:11
+  // @LINE:12
   class ReverseAssets(_prefix: => String) {
     def _defaultPrefix: String = {
       if (_prefix.endsWith("/")) "" else "/"
     }
 
   
-    // @LINE:11
+    // @LINE:12
     def versioned(file:Asset): Call = {
       implicit lazy val _rrc = new play.core.routing.ReverseRouteContext(Map(("path", "/public"))); _rrc
       Call("GET", _prefix + { _defaultPrefix } + "assets/" + implicitly[play.api.mvc.PathBindable[Asset]].unbind("file", file))

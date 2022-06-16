@@ -1,50 +1,60 @@
 [0m[[0m[0mdebug[0m] [0m[0mjavaOptions: Vector()[0m
 [0m[[0m[0mdebug[0m] [0m[0mForking tests - parallelism = false[0m
 [0m[[0m[0mdebug[0m] [0m[0mCreate a single-thread test executor[0m
-[0m[[0m[0mdebug[0m] [0m[0mRunner for org.scalatest.tools.Framework produced 2 initial tasks for 2 tests.[0m
-[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(controllers.ApplicationControllerSpec, sbt.ForkMain$SubclassFingerscan@2960e7b0, false, [SuiteSelector])[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mApplicationControllerSpec:[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController .index[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should return[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController .create()[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should create a book in the database[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController .read()[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m- should find a book in the database by id *** FAILED ***[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  scala.MatchError: None (of class scala.None$)[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  at repositories.DataRepository.$anonfun$read$1(DataRepository.scala:36)[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:470)[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  at akka.dispatch.BatchingExecutor$AbstractBatch.processBatch(BatchingExecutor.scala:63)[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  at akka.dispatch.BatchingExecutor$BlockableBatch.$anonfun$run$1(BatchingExecutor.scala:100)[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  at scala.concurrent.BlockContext$.withBlockContext(BlockContext.scala:94)[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  at akka.dispatch.BatchingExecutor$BlockableBatch.run(BatchingExecutor.scala:100)[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  at akka.dispatch.TaskInvocation.run(AbstractDispatcher.scala:49)[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  at akka.dispatch.ForkJoinExecutorConfigurator$AkkaForkJoinTask.exec(ForkJoinExecutorConfigurator.scala:48)[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m  ...[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController .update()[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should find a book in the database by id and update the fields[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController .delete()[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[32m- should find a book in the database by id and update the fields[0m[0m
-[0m[[0m[0mdebug[0m] [0m[0m    Produced 0 nested tasks and 5 events.[0m
-[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(controllers.HomeControllerSpec, sbt.ForkMain$SubclassFingerscan@66a3c2c, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunner for org.scalatest.tools.Framework produced 4 initial tasks for 4 tests.[0m
+[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(controllers.HomeControllerSpec, sbt.ForkMain$SubclassFingerscan@3c444880, false, [SuiteSelector])[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mHomeControllerSpec:[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mHomeController GET[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should render the index page from a new instance of controller[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should render the index page from the application[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should render the index page from the router[0m[0m
 [0m[[0m[0mdebug[0m] [0m[0m    Produced 0 nested tasks and 3 events.[0m
+[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(controllers.ApplicationControllerSpec, sbt.ForkMain$SubclassFingerscan@19baa47, false, [SuiteSelector])[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationControllerSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController .index[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should return[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController .create()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should create a book in the database[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should try to create a book in the database with wrong format[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController .read()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should find a book in the database by id[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should cannot find a book in the database as id does not exist[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController .readName()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should find a book in the database by name[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should cannot find a book in the database as name which does not exist[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController .update()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should find a book in the database by id and update the fields[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should try update a book by an id that does not exist and non conforming body format[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController .updateField()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should update one string field finding book by id [0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should update one Int field finding book by id[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should try update a book by an id that does not exist and non conforming body format[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController .delete()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should find a book in the database by id and delete[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should cannot find a book in the database as id and cannot delete[0m[0m
+[0m[[0m[0mdebug[0m] [0m[0m    Produced 0 nested tasks and 14 events.[0m
+[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(services.LibraryServiceSpec, sbt.ForkMain$SubclassFingerscan@15e4c9b5, false, [SuiteSelector])[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mLibraryServiceSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mgetGoogleBook[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should return a book[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should return an error[0m[0m
+[0m[[0m[0mdebug[0m] [0m[0m    Produced 0 nested tasks and 2 events.[0m
+[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(controllers.ApplicationUnitControllerSpec, sbt.ForkMain$SubclassFingerscan@134545d5, false, [SuiteSelector])[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationUnitControllerSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController unit test .create()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should create a book in the database[0m[0m
+[0m[[0m[0mdebug[0m] [0m[0m    Produced 0 nested tasks and 1 events.[0m
 [0m[[0m[0mdebug[0m] [0m[0mRunner for com.novocode.junit.JUnitFramework produced 0 initial tasks for 0 tests.[0m
 [0m[[0m[0minfo[0m] [0m[0mScalaTest[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 8 seconds, 60 milliseconds.[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 8[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 2, aborted 0[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 7, failed 1, canceled 0, ignored 0, pending 0[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[31m*** 1 TEST FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 10 seconds, 923 milliseconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 20[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 4, aborted 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 20, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mAll tests passed.[0m[0m
 [0m[[0m[0mdebug[0m] [0m[0mSummary for JUnit not available.[0m
-[0m[[0m[31merror[0m] [0m[0mFailed: Total 8, Failed 1, Errors 0, Passed 7[0m
+[0m[[0m[0minfo[0m] [0m[0mPassed: Total 20, Failed 0, Errors 0, Passed 20[0m
 [0m[[0m[0mdebug[0m] [0m[0mPassed tests:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	controllers.ApplicationControllerSpec[0m
+[0m[[0m[0mdebug[0m] [0m[0m	controllers.ApplicationUnitControllerSpec[0m
 [0m[[0m[0mdebug[0m] [0m[0m	controllers.HomeControllerSpec[0m
-[0m[[0m[31merror[0m] [0m[0mFailed tests:[0m
-[0m[[0m[31merror[0m] [0m[0m	controllers.ApplicationControllerSpec[0m
-[0m[[0m[31merror[0m] [0m[0m(Test / [31mtest[0m) sbt.TestsFailedException: Tests unsuccessful[0m
+[0m[[0m[0mdebug[0m] [0m[0m	services.LibraryServiceSpec[0m

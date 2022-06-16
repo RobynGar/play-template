@@ -15,4 +15,9 @@ val httpResponseStatus: Int,
         s"Bad response from upstream; got status: $upstreamStatus, and got reason $upstreamMessage"
       )
 
+    final case class GenericResponse(status: Int, message: String)
+      extends APIError(
+        status, message
+    )
+
   }

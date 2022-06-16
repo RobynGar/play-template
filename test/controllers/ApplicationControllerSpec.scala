@@ -19,27 +19,15 @@ import scala.concurrent.Future
 
 
 
-class ApplicationControllerSpec extends BaseSpecWithApplication with MockFactory with Matchers{
+class ApplicationControllerSpec extends BaseSpecWithApplication {
 
   //integration testing
   val TestApplicationController = new ApplicationController(
     component,
-    repository,
     serviceLayer,
     service
   )
 
-  //unit testing
-//  val mockServiceLayer: ApplicationService = mock[ApplicationService]
-//  val mockRepository: DataRepository = mock[DataRepository]
-//  val mockService: LibraryService = mock[LibraryService]
-//
-//  val unitTestController = new ApplicationController(
-//    component,
-//    mockRepository,
-//    mockServiceLayer,
-//    mockService
-//  )
 
   private val dataModel: DataModel = DataModel(
     "abcd",
@@ -247,21 +235,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication with MockFactory
   }
 
 
-//  UNIT TESTING
 
-//  "ApplicationController .read()" should {
-//    "create a book in the database" in {
-//      beforeEach()
-//      //(mockServiceLayer.create _).expects(FakeRequest[JsValue](Json.toJson(dataModel)))
-//      val request: FakeRequest[JsValue] = buildPost("/api/create").withBody[JsValue](Json.toJson(dataModel))
-//      val createdResult: Future[Result] = unitTestController.create()(request)
-//
-//      status(createdResult) shouldBe Status.CREATED
-//      contentAsJson(createdResult).as[DataModel] shouldBe DataModel("abcd", "testname", "test description", 100)
-//
-//      afterEach()
-//    }
-//  }
 
 
 

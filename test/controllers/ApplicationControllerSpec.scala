@@ -1,7 +1,7 @@
 package controllers
 
 import baseSpec.BaseSpecWithApplication
-import models.DataModel
+import models.{DataModel, Field}
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.concurrent.ScalaFutures
 import play.api.test.FakeRequest
@@ -37,6 +37,14 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
     "updated test name",
     "test description",
     100
+  )
+  private val updatedNumField: Field = Field(
+    "numSales",
+    "3500"
+  )
+  private val updatedField: Field = Field(
+    "name",
+    "updated field name"
   )
 
   //val url = "https://www.googleapis.com/books/v1/volumes?q=rowling%potter"
@@ -151,6 +159,44 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
       val updateRequest = buildPut("/api/4").withBody[JsValue](Json.obj())
 
       val updateResult = TestApplicationController.update("4")(updateRequest)
+
+      status(updateResult) shouldBe Status.BAD_REQUEST
+      afterEach()
+    }
+
+  }
+
+  "ApplicationController .updateField()" should {
+
+    "update one string field finding book by id " in {
+      beforeEach()
+      val request: FakeRequest[JsValue] = buildPost("/api").withBody[JsValue](Json.toJson(dataModel))
+      val createdResult: Future[Result] = TestApplicationController.create()(request)
+      val updateRequest: FakeRequest[JsValue] = buildPut("/api/update/abcd").withBody[JsValue](Json.toJson(updatedField))
+      val updateResult: Future[Result] = TestApplicationController.updateField("abcd")(updateRequest)
+
+      status(createdResult) shouldBe Status.CREATED
+      status(updateResult) shouldBe Status.ACCEPTED
+      afterEach()
+    }
+
+    "update one Int field finding book by id" in {
+      beforeEach()
+      val request: FakeRequest[JsValue] = buildPost("/api").withBody[JsValue](Json.toJson(dataModel))
+      val updateRequest: FakeRequest[JsValue] = buildPut("/api/update/abcd").withBody[JsValue](Json.toJson(updatedNumField))
+      val createdResult: Future[Result] = TestApplicationController.create()(request)
+      val updateResult: Future[Result] = TestApplicationController.updateField("abcd")(updateRequest)
+
+      status(createdResult) shouldBe Status.CREATED
+      status(updateResult) shouldBe Status.ACCEPTED
+      afterEach()
+    }
+
+    "try update a book by an id that does not exist and non conforming body format" in {
+      beforeEach()
+      val updateRequest = buildPut("/api/4").withBody[JsValue](Json.obj())
+
+      val updateResult = TestApplicationController.updateField("4")(updateRequest)
 
       status(updateResult) shouldBe Status.BAD_REQUEST
       afterEach()

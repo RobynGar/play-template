@@ -74,7 +74,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 
   def updateField(id: String): Action[JsValue] = Action.async(parse.json) { implicit request =>
     applicationService.updateField(id, request).map {
-      case Right(updated: String) => Accepted
+      case Right(updated: DataModel) => Accepted
       case Left(error) => BadRequest
     }
   }

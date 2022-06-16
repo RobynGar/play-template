@@ -45,7 +45,7 @@ class ApplicationService @Inject()(val dataRepository: DataRepository)(implicit 
 
   }
 
-  def updateField(id: String, input: Request[JsValue]): Future[Either[APIError, String]] = {
+  def updateField(id: String, input: Request[JsValue]): Future[Either[APIError, DataModel]] = {
     input.body.validate[Field] match {
       case JsSuccess(field, _) if(field.fieldName == "name")=> dataRepository.updateField(id, "name", field.value)
       case JsSuccess(field, _) if(field.fieldName == "description")=> dataRepository.updateField(id, "description", field.value)

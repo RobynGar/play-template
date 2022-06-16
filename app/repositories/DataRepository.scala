@@ -28,7 +28,7 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
        .insertOne(book)
        .toFutureOption()
        .map {
-         case Some(value) if value.wasAcknowledged.equals(true) => Right(book)
+         case Some(value) if value.wasAcknowledged() => Right(book)
          case _ => Left(APIError.BadAPIResponse(415, "Could not make book"))
        }
 
@@ -68,18 +68,18 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
       replacement = book, //replacement document
       options = new ReplaceOptions().upsert(true) //upsert when true inserts what replacement is = to if no document matches the filter (no matching id) or if does match replaces it with what is in replacement
     ).toFutureOption().map{
-      case Some(value) if(value.wasAcknowledged().equals(true)) => Right(book)
+      case Some(value) if value.wasAcknowledged() => Right(book)
       case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
     }
 
-  def updateField(id: String, fieldName: String, value: String): Future[Either[APIError, String]]= {
+  def updateField(id: String, fieldName: String, value: String): Future[Either[APIError, DataModel]]= {
     if(fieldName == "numSales"){
       collection.findOneAndUpdate(equal("_id", id), set(fieldName, value.toInt)).toFutureOption().map{
-        case Some(value: DataModel) => Right("updated")
+        case Some(value: DataModel) => Right(value)
         case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
       }} else{
     collection.findOneAndUpdate(equal("_id", id), set(fieldName, value)).toFutureOption().map{
-      case Some(value: DataModel) => Right("updated")
+      case Some(value: DataModel) => Right(value)
       case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
     }
     }

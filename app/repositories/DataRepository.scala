@@ -26,9 +26,9 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
   def create(book: DataModel): Future[Either[APIError, DataModel]] =
     collection
        .insertOne(book)
-       .toFuture()
+       .toFutureOption()
        .map {
-         case value if value.wasAcknowledged.equals(true) => Right(book)
+         case Some(value) if value.wasAcknowledged.equals(true) => Right(book)
          case _ => Left(APIError.BadAPIResponse(415, "Could not make book"))
        }
 
@@ -67,8 +67,8 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
       filter = byID(id), //selection criteria
       replacement = book, //replacement document
       options = new ReplaceOptions().upsert(true) //upsert when true inserts what replacement is = to if no document matches the filter (no matching id) or if does match replaces it with what is in replacement
-    ).toFuture().map{
-      case value if(value.wasAcknowledged().equals(true)) => Right(book)
+    ).toFutureOption().map{
+      case Some(value) if(value.wasAcknowledged().equals(true)) => Right(book)
       case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
     }
 
@@ -87,8 +87,8 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
 
   def delete(id: String): Future[Either[APIError, String]] = {
     collection.deleteOne(
-        filter = byID(id)).toFuture().map{
-      case value if value.getDeletedCount == 1 => Right("deleted")
+        filter = byID(id)).toFutureOption().map{
+      case Some(value) if value.getDeletedCount == 1 => Right("deleted")
       //case value if value.wasAcknowledged().equals(true) => Right("deleted")
       case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
     }

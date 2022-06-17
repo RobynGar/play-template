@@ -83,7 +83,8 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
       beforeEach()
       val request = buildPost("/api/create").withBody[JsValue](Json.obj())
       val createdResult = TestApplicationController.create()(request)
-      status(createdResult) shouldBe Status.BAD_REQUEST
+      status(createdResult) shouldBe Status.INTERNAL_SERVER_ERROR
+      contentAsJson(createdResult) shouldBe Json.toJson("Bad response from upstream; got status: 415, and got reason could not make book")
       afterEach()
     }
 
@@ -111,7 +112,8 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
       val readRequest: FakeRequest[AnyContentAsEmpty.type] = buildGet("/api/5")
       val readResult: Future[Result] = TestApplicationController.read("5")(readRequest)
 
-      status(readResult) shouldBe Status.BAD_REQUEST
+      status(readResult) shouldBe Status.INTERNAL_SERVER_ERROR
+      contentAsJson(readResult) shouldBe Json.toJson("Bad response from upstream; got status: 404, and got reason could not find book")
       afterEach()
     }
 
@@ -137,7 +139,8 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
       val readRequest: FakeRequest[AnyContentAsEmpty.type] = buildGet("/api/name/jelly")
       val readResult: Future[Result] = TestApplicationController.read("jelly")(readRequest)
 
-      status(readResult) shouldBe Status.BAD_REQUEST
+      status(readResult) shouldBe Status.INTERNAL_SERVER_ERROR
+      contentAsJson(readResult) shouldBe Json.toJson("Bad response from upstream; got status: 404, and got reason could not find book")
       afterEach()
     }
   }
@@ -163,7 +166,8 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
 
       val updateResult = TestApplicationController.update("4")(updateRequest)
 
-      status(updateResult) shouldBe Status.BAD_REQUEST
+      status(updateResult) shouldBe Status.INTERNAL_SERVER_ERROR
+      contentAsJson(updateResult) shouldBe Json.toJson("Bad response from upstream; got status: 400, and got reason could not update book")
       afterEach()
     }
 
@@ -180,6 +184,8 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
 
       status(createdResult) shouldBe Status.CREATED
       status(updateResult) shouldBe Status.ACCEPTED
+      contentAsJson(updateResult) shouldBe Json.toJson(DataModel("abcd", "updated field name", "test description", 100))
+
       afterEach()
     }
 
@@ -192,6 +198,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
 
       status(createdResult) shouldBe Status.CREATED
       status(updateResult) shouldBe Status.ACCEPTED
+      contentAsJson(updateResult) shouldBe Json.toJson(DataModel("abcd", "testname", "test description", 3500))
       afterEach()
     }
 
@@ -201,7 +208,8 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
 
       val updateResult = TestApplicationController.updateField("4")(updateRequest)
 
-      status(updateResult) shouldBe Status.BAD_REQUEST
+      status(updateResult) shouldBe Status.INTERNAL_SERVER_ERROR
+      contentAsJson(updateResult) shouldBe Json.toJson("Bad response from upstream; got status: 400, and got reason could not update book")
       afterEach()
     }
 
@@ -228,7 +236,8 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
 
       val deleteResult: Future[Result] = TestApplicationController.delete("8")(deleteRequest)
 
-      status(deleteResult) shouldBe Status.BAD_REQUEST
+      status(deleteResult) shouldBe Status.INTERNAL_SERVER_ERROR
+      contentAsJson(deleteResult) shouldBe Json.toJson("Bad response from upstream; got status: 404, and got reason could not delete book")
       afterEach()
     }
 

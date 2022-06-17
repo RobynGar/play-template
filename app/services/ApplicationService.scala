@@ -17,7 +17,7 @@ class ApplicationService @Inject()(val dataRepository: DataRepository)(implicit 
   def index(): Future[Either[APIError, Seq[JsValue]]] = {
     dataRepository.collection.find().toFuture().map{
       case books: Seq[DataModel] => Right(books.map(book => Json.toJson(book)))
-      case _ => Left(APIError.BadAPIResponse(404, "Could not find books"))
+      case _ => Left(APIError.BadAPIResponse(404, "could not find books"))
     }
     }
 
@@ -26,7 +26,7 @@ class ApplicationService @Inject()(val dataRepository: DataRepository)(implicit 
   def create(input: Request[JsValue]): Future[Either[APIError, DataModel]] = {
     input.body.validate[DataModel] match {
       case JsSuccess(value, _) => dataRepository.create(value)
-      case JsError(errors) => Future(Left(APIError.BadAPIResponse(415, "Could not make book")))
+      case JsError(errors) => Future(Left(APIError.BadAPIResponse(415, "could not make book")))
     }
 
   }
@@ -35,21 +35,21 @@ class ApplicationService @Inject()(val dataRepository: DataRepository)(implicit 
   def read(id: String): Future[Either[APIError, DataModel]] =
       dataRepository.read(id).map{
         case Right(book: DataModel) => Right(book)
-        case Left(errors) => Left(APIError.BadAPIResponse(404, "Could not find book"))
+        case Left(errors) => Left(APIError.BadAPIResponse(404, "could not find book"))
       }
 
 
   def readName(name: String): Future[Either[APIError, DataModel]] =
     dataRepository.readName(name).map{
       case Right(book: DataModel) => Right(book)
-      case Left(errors) => Left(APIError.BadAPIResponse(404, "Could not find book"))
+      case Left(errors) => Left(APIError.BadAPIResponse(404, "could not find book"))
     }
 
 
   def update(id: String, input: Request[JsValue]): Future[Either[APIError, DataModel]] = {
     input.body.validate[DataModel] match {
       case JsSuccess(book, _) => dataRepository.update(id, book)
-      case JsError(errors) => Future(Left(APIError.BadAPIResponse(400, "Could not update book")))
+      case JsError(errors) => Future(Left(APIError.BadAPIResponse(400, "could not update book")))
     }
 
   }
@@ -59,7 +59,7 @@ class ApplicationService @Inject()(val dataRepository: DataRepository)(implicit 
       case JsSuccess(field, _) if(field.fieldName == "name")=> dataRepository.updateField(id, "name", field.value)
       case JsSuccess(field, _) if(field.fieldName == "description")=> dataRepository.updateField(id, "description", field.value)
       case JsSuccess(field, _) if(field.fieldName == "numSales")=> dataRepository.updateField(id, "numSales", field.value)
-      case JsError(errors) => Future(Left(APIError.BadAPIResponse(400, "Could not update book")))
+      case JsError(errors) => Future(Left(APIError.BadAPIResponse(400, "could not update book")))
     }
 
   }
@@ -68,7 +68,7 @@ class ApplicationService @Inject()(val dataRepository: DataRepository)(implicit 
   def delete(id: String): Future[Either[APIError, String]] = {
     dataRepository.delete(id).map{
       case Right(deleted: String) => Right("deleted")
-      case Left(error) => Left(APIError.BadAPIResponse(404, "Could not delete book"))
+      case Left(error) => Left(APIError.BadAPIResponse(404, "could not delete book"))
     }
   }
 

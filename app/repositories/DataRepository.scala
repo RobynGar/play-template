@@ -5,6 +5,7 @@ import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters.{empty, equal}
 import org.mongodb.scala.model.Updates.set
 import org.mongodb.scala.model._
+import play.api.libs.json.JsValue
 import play.libs.Json
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
@@ -29,7 +30,7 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
        .toFutureOption()
        .map {
          case Some(value) if value.wasAcknowledged() => Right(book)
-         case _ => Left(APIError.BadAPIResponse(415, "Could not make book"))
+         case _ => Left(APIError.BadAPIResponse(415, "could not make book"))
        }
 
 
@@ -50,7 +51,7 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
     collection.find(byID(id)).headOption flatMap {
       case Some(data) =>
         Future(Right(data))
-      case _ => Future(Left(APIError.BadAPIResponse(404, "Could not read book")))
+      case _ => Future(Left(APIError.BadAPIResponse(404, "could not read book")))
     }
   }
 
@@ -58,7 +59,7 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
     collection.find(byName(name)).headOption flatMap {
       case Some(data) =>
         Future(Right(data))
-      case _ => Future(Left(APIError.BadAPIResponse(404, "Could not read book")))
+      case _ => Future(Left(APIError.BadAPIResponse(404, "could not read book")))
     }
   }
 
@@ -69,20 +70,28 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
       options = new ReplaceOptions().upsert(true) //upsert when true inserts what replacement is = to if no document matches the filter (no matching id) or if does match replaces it with what is in replacement
     ).toFutureOption().map{
       case Some(value) if value.wasAcknowledged() => Right(book)
-      case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
+      case _ =>  Left(APIError.BadAPIResponse(400, "could not update book"))
     }
 
   def updateField(id: String, fieldName: String, value: String): Future[Either[APIError, DataModel]]= {
-    if(fieldName == "numSales"){
-      collection.findOneAndUpdate(equal("_id", id), set(fieldName, value.toInt)).toFutureOption().map{
+    if (fieldName == "numSales") {
+      collection.findOneAndUpdate(equal("_id", id),
+        set(fieldName, value.toInt),
+        options = FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
+      ).toFutureOption().map {
         case Some(value: DataModel) => Right(value)
-        case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
-      }} else{
-    collection.findOneAndUpdate(equal("_id", id), set(fieldName, value)).toFutureOption().map{
-      case Some(value: DataModel) => Right(value)
-      case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
+        case _ => Left(APIError.BadAPIResponse(400, "could not update book"))
+      }
+    } else {
+      collection.findOneAndUpdate(equal("_id", id),
+        set(fieldName, value),
+        options = FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
+      ).toFutureOption().map {
+        case Some(value: DataModel) => Right(value)
+        case _ => Left(APIError.BadAPIResponse(400, "could not update book"))
+      }
     }
-    }
+
   }
 
   def delete(id: String): Future[Either[APIError, String]] = {

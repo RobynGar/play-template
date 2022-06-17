@@ -17,7 +17,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   def index(): Action[AnyContent] = Action.async { implicit request =>
     applicationService.index().map{
       case Right(book: Seq[JsValue]) => Ok(Json.toJson(book))
-      case Left(error) => BadRequest
+      case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }
   }
 
@@ -38,7 +38,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   def read(id: String): Action[AnyContent] = Action.async { implicit request =>
     applicationService.read(id).map{
       case Right(book: DataModel) => Ok(DataModel.formats.writes(book))
-      case Left(error) => BadRequest
+      case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }
 //     dataRepository.read(id).map{
 //      //case book if(book.isInstanceOf[DataModel]) => Ok(Json.toJson(book))
@@ -50,7 +50,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   def readName(name: String): Action[AnyContent] = Action.async { implicit request =>
     applicationService.readName(name).map{
       case Right(book: DataModel) => Ok(Json.toJson(book))
-      case Left(error) => BadRequest
+      case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }
 
   }
@@ -58,7 +58,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   def update(id: String): Action[JsValue] = Action.async(parse.json) { implicit request =>
     applicationService.update(id, request).map {
       case Right(book: DataModel) => Accepted(Json.toJson(book))
-      case Left(error) => BadRequest
+      case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }
 
 
@@ -76,15 +76,15 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 
   def updateField(id: String): Action[JsValue] = Action.async(parse.json) { implicit request =>
     applicationService.updateField(id, request).map {
-      case Right(updated: DataModel) => Accepted
-      case Left(error) => BadRequest
+      case Right(updated: DataModel) => Accepted(Json.toJson(updated))
+      case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }
   }
 
   def delete(id: String): Action[AnyContent]= Action.async { implicit request =>
     applicationService.delete(id).map{
       case Right(deleted: String) => Accepted
-      case Left(error) => BadRequest
+      case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
 
     }
 //    dataRepository.delete(id)
@@ -95,7 +95,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   def getGoogleBook(search: String, term: String): Action[AnyContent] = Action.async { implicit request =>
    libraryService.getGoogleBook(search = search, term = term).value.map{
      case Right(book) => Ok(Json.toJson(book))
-     case Left(error) => BadRequest
+     case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
    }
 
   }

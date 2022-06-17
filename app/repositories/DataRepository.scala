@@ -99,7 +99,7 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
         filter = byID(id)).toFutureOption().map{
       case Some(value) if value.getDeletedCount == 1 => Right("deleted")
       //case value if value.wasAcknowledged().equals(true) => Right("deleted")
-      case _ =>  Left(APIError.BadAPIResponse(400, "Could not update book"))
+      case _ =>  Left(APIError.BadAPIResponse(400, "could not update book"))
     }
   }
 

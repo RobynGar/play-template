@@ -2,14 +2,14 @@
 [0m[[0m[0mdebug[0m] [0m[0mForking tests - parallelism = false[0m
 [0m[[0m[0mdebug[0m] [0m[0mCreate a single-thread test executor[0m
 [0m[[0m[0mdebug[0m] [0m[0mRunner for org.scalatest.tools.Framework produced 4 initial tasks for 4 tests.[0m
-[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(controllers.HomeControllerSpec, sbt.ForkMain$SubclassFingerscan@120f7956, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(controllers.HomeControllerSpec, sbt.ForkMain$SubclassFingerscan@9bc95c3, false, [SuiteSelector])[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mHomeControllerSpec:[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mHomeController GET[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should render the index page from a new instance of controller[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should render the index page from the application[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should render the index page from the router[0m[0m
 [0m[[0m[0mdebug[0m] [0m[0m    Produced 0 nested tasks and 3 events.[0m
-[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(controllers.ApplicationControllerSpec, sbt.ForkMain$SubclassFingerscan@78a0a772, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(controllers.ApplicationControllerSpec, sbt.ForkMain$SubclassFingerscan@41e91ba9, false, [SuiteSelector])[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mApplicationControllerSpec:[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mApplicationController .index[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should return[0m[0m
@@ -33,27 +33,43 @@
 [0m[[0m[0minfo[0m] [0m[0m[32m- should find a book in the database by id and delete[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should cannot find a book in the database as id and cannot delete[0m[0m
 [0m[[0m[0mdebug[0m] [0m[0m    Produced 0 nested tasks and 14 events.[0m
-[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(services.LibraryServiceSpec, sbt.ForkMain$SubclassFingerscan@23460995, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(services.LibraryServiceSpec, sbt.ForkMain$SubclassFingerscan@41e10c83, false, [SuiteSelector])[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mLibraryServiceSpec:[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mgetGoogleBook[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should return a book[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should return an error[0m[0m
 [0m[[0m[0mdebug[0m] [0m[0m    Produced 0 nested tasks and 2 events.[0m
-[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(controllers.ApplicationUnitControllerSpec, sbt.ForkMain$SubclassFingerscan@5d49608c, false, [SuiteSelector])[0m
+[0m[[0m[0mdebug[0m] [0m[0m  Running TaskDef(controllers.ApplicationUnitControllerSpec, sbt.ForkMain$SubclassFingerscan@5362477, false, [SuiteSelector])[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mApplicationUnitControllerSpec:[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mApplicationController unit test .create()[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should create a book in the database[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32m- should cannot create book[0m[0m
-[0m[[0m[0mdebug[0m] [0m[0m    Produced 0 nested tasks and 2 events.[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController unit test .read()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should read a book in the database[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should cannot read book[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController unit test .readName()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should by name read a book in the database[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should cannot read book[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController unit test .update()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should update a book in the database[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should cannot update book[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController unit test .updateField()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should update one string field a book in the database[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should update one int field a book in the database[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should cannot update one field of a book[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mApplicationController unit test .delete()[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should delete a book in the database[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- should cannot delete book[0m[0m
+[0m[[0m[0mdebug[0m] [0m[0m    Produced 0 nested tasks and 13 events.[0m
 [0m[[0m[0mdebug[0m] [0m[0mRunner for com.novocode.junit.JUnitFramework produced 0 initial tasks for 0 tests.[0m
 [0m[[0m[0minfo[0m] [0m[0mScalaTest[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 9 seconds, 209 milliseconds.[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 21[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mRun completed in 8 seconds, 783 milliseconds.[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTotal number of tests run: 32[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[36mSuites: completed 4, aborted 0[0m[0m
-[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 21, failed 0, canceled 0, ignored 0, pending 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[36mTests: succeeded 32, failed 0, canceled 0, ignored 0, pending 0[0m[0m
 [0m[[0m[0minfo[0m] [0m[0m[32mAll tests passed.[0m[0m
 [0m[[0m[0mdebug[0m] [0m[0mSummary for JUnit not available.[0m
-[0m[[0m[0minfo[0m] [0m[0mPassed: Total 21, Failed 0, Errors 0, Passed 21[0m
+[0m[[0m[0minfo[0m] [0m[0mPassed: Total 32, Failed 0, Errors 0, Passed 32[0m
 [0m[[0m[0mdebug[0m] [0m[0mPassed tests:[0m
 [0m[[0m[0mdebug[0m] [0m[0m	controllers.ApplicationControllerSpec[0m
 [0m[[0m[0mdebug[0m] [0m[0m	controllers.ApplicationUnitControllerSpec[0m

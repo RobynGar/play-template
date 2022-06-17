@@ -167,25 +167,63 @@ class ApplicationUnitControllerSpec extends BaseSpecWithApplication with MockFac
     "update one string field a book in the database" in {
       val request: FakeRequest[JsValue] = buildPut("/api/update/abcd").withBody[JsValue](Json.toJson(updatedField))
 
-      (mockServiceLayer.updateField(_ : String, _ : Request[JsValue])).expects(*, request).returning(Future(Right(dataModel))).once()
+      (mockServiceLayer.updateField(_ : String, _ : Request[JsValue])).expects(*, request).returning(Future(Right(fieldStringModel))).once()
 
       val updateResult: Future[Result] = unitTestController.updateField("abcd")(request)
 
       status(updateResult) shouldBe Status.ACCEPTED
-      contentAsJson(updateResult).as[DataModel] shouldBe dataModel
+      contentAsJson(updateResult).as[DataModel] shouldBe fieldStringModel
 
     }
 
-    "cannot update book" in {
+    "update one int field a book in the database" in {
+      val request: FakeRequest[JsValue] = buildPut("/api/update/abcd").withBody[JsValue](Json.toJson(updatedNumField))
 
-      val request: FakeRequest[JsValue] = buildPut("/api/2").withBody[JsValue](Json.obj())
+      (mockServiceLayer.updateField(_ : String, _ : Request[JsValue])).expects(*, request).returning(Future(Right(fieldNumModel))).once()
 
-      (mockServiceLayer.update(_ : String, _ : Request[JsValue])).expects(*, request).returning(Future(Left(APIError.BadAPIResponse(400, "could not update book")))).once()
+      val updateResult: Future[Result] = unitTestController.updateField("abcd")(request)
 
-      val readResult: Future[Result] = unitTestController.update("2")(request)
+      status(updateResult) shouldBe Status.ACCEPTED
+      contentAsJson(updateResult).as[DataModel] shouldBe fieldNumModel
 
-      status(readResult) shouldBe Status.INTERNAL_SERVER_ERROR
-      contentAsJson(readResult) shouldBe Json.toJson("Bad response from upstream; got status: 400, and got reason could not update book")
+    }
+
+    "cannot update one field of a book" in {
+
+      val request: FakeRequest[JsValue] = buildPut("/api/update/2").withBody[JsValue](Json.obj())
+
+      (mockServiceLayer.updateField(_ : String, _ : Request[JsValue])).expects(*, request).returning(Future(Left(APIError.BadAPIResponse(400, "could not update book")))).once()
+
+      val updateResult: Future[Result] = unitTestController.updateField("2")(request)
+
+      status(updateResult) shouldBe Status.INTERNAL_SERVER_ERROR
+      contentAsJson(updateResult) shouldBe Json.toJson("Bad response from upstream; got status: 400, and got reason could not update book")
+    }
+
+  }
+
+  "ApplicationController unit test .delete()" should {
+    "delete a book in the database" in {
+      val request: FakeRequest[AnyContent] = buildDelete("/api/abcd")
+
+      (mockServiceLayer.delete(_ : String)).expects(*).returning(Future(Right("deleted"))).once()
+
+      val deleteResult: Future[Result] = unitTestController.delete("abcd")(request)
+
+      status(deleteResult) shouldBe Status.ACCEPTED
+
+    }
+
+    "cannot delete book" in {
+      val request: FakeRequest[AnyContent] = buildDelete("/api/abcd")
+
+      (mockServiceLayer.delete(_ : String)).expects(*).returning(Future(Left(APIError.BadAPIResponse(404, "could not delete book")))).once()
+
+      val deleteResult: Future[Result] = unitTestController.delete("abcd")(request)
+
+
+      status(deleteResult) shouldBe Status.INTERNAL_SERVER_ERROR
+      contentAsJson(deleteResult) shouldBe Json.toJson("Bad response from upstream; got status: 404, and got reason could not delete book")
     }
 
   }

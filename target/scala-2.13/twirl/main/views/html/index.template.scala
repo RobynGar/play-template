@@ -41,6 +41,26 @@ Seq[Any](format.raw/*2.1*/("""
 
     <p class="lead mb-5">This project is deployed via Heroku.</p>
 
+    <div id="googleBooks"></div>
+
+    <script>
+
+        showBooks = books => """),format.raw/*24.30*/("""{"""),format.raw/*24.31*/("""
+        """),format.raw/*25.9*/("""const booksDiv = document.querySelector('#googleBooks');
+         books.forEach(book => """),format.raw/*26.32*/("""{"""),format.raw/*26.33*/("""
+    """),format.raw/*27.5*/("""const bookElement = document.createElement(‘p’);
+    bookElement.innerText = `book Title: $"""),format.raw/*28.43*/("""{"""),format.raw/*28.44*/("""book.title"""),format.raw/*28.54*/("""}"""),format.raw/*28.55*/("""`;
+    booksDiv.append(bookElement);
+
+  """),format.raw/*31.3*/("""}"""),format.raw/*31.4*/(""");
+        """),format.raw/*32.9*/("""}"""),format.raw/*32.10*/("""
+
+       """),format.raw/*34.8*/("""fetch('https://www.googleapis.com/books/v1/volumes?q=rowling%potter')
+       .then(response => response.json())
+       .then(books => showBooks(books.result));
+
+    </script>
+
     <h3>API Documentation</h3>
     <div class="justify-content-center">
       <table class="table">
@@ -105,7 +125,7 @@ Seq[Any](format.raw/*2.1*/("""
   </div>
 
 </div>
-""")))}),format.raw/*84.2*/("""
+""")))}),format.raw/*104.2*/("""
 """))
       }
     }
@@ -122,11 +142,11 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: 2022-05-25T13:21:51.153
+                  DATE: 2022-06-21T11:58:36.135
                   SOURCE: /Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/app/views/index.scala.html
-                  HASH: 1b61555355c011c1b459eae6c1e8e7d831765063
-                  MATRIX: 722->1|818->4|845->6|880->33|919->35|947->37|3123->2183
-                  LINES: 21->1|26->2|27->3|27->3|27->3|29->5|108->84
+                  HASH: d36de4a73106df524c31ffe7d271d39d6c9f0712
+                  MATRIX: 722->1|818->4|845->6|880->33|919->35|947->37|1594->656|1623->657|1659->666|1775->754|1804->755|1836->760|1955->851|1984->852|2022->862|2051->863|2118->903|2146->904|2184->915|2213->916|2249->925|4060->2705
+                  LINES: 21->1|26->2|27->3|27->3|27->3|29->5|48->24|48->24|49->25|50->26|50->26|51->27|52->28|52->28|52->28|52->28|55->31|55->31|56->32|56->32|58->34|128->104
                   -- GENERATED --
               */
           

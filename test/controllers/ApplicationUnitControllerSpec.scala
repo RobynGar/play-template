@@ -9,7 +9,6 @@ import play.api.mvc.{AnyContent, Request, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, status}
 import services.{ApplicationService, LibraryService}
-
 import scala.concurrent.Future
 
 class ApplicationUnitControllerSpec extends BaseSpecWithApplication with MockFactory {
@@ -52,6 +51,15 @@ class ApplicationUnitControllerSpec extends BaseSpecWithApplication with MockFac
     "test description",
     100
   )
+
+//  "ApplicationController unit test .index()" should {
+//
+//    val result = unitTestController.index()(FakeRequest())
+//    (mockServiceLayer.index()).
+//    "return" in {
+//      status(result) shouldBe Status.OK
+//    }
+//  }
 
   "ApplicationController unit test .create()" should {
     "create a book in the database" in {

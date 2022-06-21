@@ -4,22 +4,22 @@ package services
 import models.{APIError, DataModel, Field}
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.Request
-import repositories.DataRepository
+import repositories.{DataRepository, TraitDataRepo}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
-class ApplicationService @Inject()(val dataRepository: DataRepository)(implicit val ec: ExecutionContext) {
+class ApplicationService @Inject()(dataRepository: TraitDataRepo)(implicit ec: ExecutionContext) {
 
 
   def index(): Future[Either[APIError, Seq[JsValue]]] = {
-    dataRepository.collection.find().toFuture().map{
-      case books: Seq[DataModel] => Right(books.map(book => Json.toJson(book)))
-      case _ => Left(APIError.BadAPIResponse(404, "could not find books"))
+    dataRepository.index().map{
+      case Right(books: Seq[DataModel]) => Right(books.map(book => Json.toJson(book)))
+      case Left(_) => Left(APIError.BadAPIResponse(404, "could not find books"))
     }
-    }
+  }
 
 
 

@@ -1,13 +1,11 @@
 package controllers
 
-import models.{APIError, DataModel}
-import play.api.libs.json.{JsError, JsObject, JsSuccess, JsValue, Json}
+import models.DataModel
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
-import repositories.DataRepository
 import services.{ApplicationService, LibraryService}
-
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 
 

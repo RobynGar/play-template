@@ -1,28 +1,49 @@
 package repositories
 
+import com.google.inject.ImplementedBy
 import models.{APIError, DataModel}
 import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters.{empty, equal}
 import org.mongodb.scala.model.Updates.set
 import org.mongodb.scala.model._
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsValue, Json}
 import play.libs.Json
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.duration.SECONDS
 import scala.concurrent.{ExecutionContext, Future}
 
+@ImplementedBy(classOf[DataRepository])
+trait TraitDataRepo {
+  def index(): Future[Either[APIError, Seq[DataModel]]]
+  def create(book: DataModel): Future[Either[APIError, DataModel]]
+  def read(id: String): Future[Either[APIError, DataModel]]
+  def readName(id: String): Future[Either[APIError, DataModel]]
+  def update(id: String, book: DataModel): Future[Either[APIError, DataModel]]
+  def updateField(id: String, fieldName: String, value: String): Future[Either[APIError, DataModel]]
+  def delete(id: String): Future[Either[APIError, String]]
+}
+
 @Singleton
-class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: ExecutionContext) extends PlayMongoRepository[DataModel](
+class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: ExecutionContext) extends PlayMongoRepository[DataModel] (
   collectionName = "dataModels",
   mongoComponent = mongoComponent,
   domainFormat = DataModel.formats,
   indexes = Seq(IndexModel(
-    Indexes.ascending("_id")
-  )),
-  replaceIndexes = false
-) {
+    Indexes.ascending("_id"),
+    IndexOptions().name("ttlIndex").unique(true).expireAfter(0, SECONDS))
+  )
+) with TraitDataRepo {
+
+  import scala.concurrent.duration.SECONDS
+
+  def index(): Future[Either[APIError, Seq[DataModel]]]  =
+    collection.find().toFuture().map{
+      case books: Seq[DataModel] => Right(books)
+      case _ => Left(APIError.BadAPIResponse(404, "could not find books"))
+    }
 
   def create(book: DataModel): Future[Either[APIError, DataModel]] =
     collection

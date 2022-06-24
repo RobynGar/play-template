@@ -44,25 +44,7 @@ Seq[Any](format.raw/*8.1*/("""
 
       """),format.raw/*23.7*/("""<script src=""""),_display_(/*23.21*/routes/*23.27*/.Assets.versioned("javascripts/main.js")),format.raw/*23.67*/("""" type="text/javascript"></script>
 
-<!--    <div id="googleBooks"></div>-->
 
-<!--    <script>-->
-
-<!--        showBooks = books => """),format.raw/*29.34*/("""{"""),format.raw/*29.35*/("""-->
-<!--        const booksDiv = document.querySelector('#googleBooks');-->
-<!--         books.forEach(book => """),format.raw/*31.36*/("""{"""),format.raw/*31.37*/("""-->
-<!--    const bookElement = document.createElement(‘p’);-->
-<!--    bookElement.innerText = `book Title: $"""),format.raw/*33.47*/("""{"""),format.raw/*33.48*/("""book.title"""),format.raw/*33.58*/("""}"""),format.raw/*33.59*/("""`;-->
-<!--    booksDiv.append(bookElement);-->
-
-<!--  """),format.raw/*36.7*/("""}"""),format.raw/*36.8*/(""");-->
-<!--        """),format.raw/*37.13*/("""}"""),format.raw/*37.14*/("""-->
-
-<!--       fetch('https://www.googleapis.com/books/v1/volumes?q=rowling%potter')-->
-<!--       .then(response => response.json())-->
-<!--       .then(books => showBooks(books.result));-->
-
-<!--    </script>-->
     </body>
 </html>
 """))
@@ -81,11 +63,11 @@ Seq[Any](format.raw/*8.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: 2022-06-21T11:58:36.101
+                  DATE: 2022-06-22T16:49:27.234
                   SOURCE: /Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/app/views/main.scala.html
-                  HASH: d0b48370b69c39c708f55c842925ade0e311e24c
-                  MATRIX: 987->260|1111->291|1138->292|1218->397|1254->406|1289->414|1315->419|1404->481|1419->487|1482->528|1570->589|1585->595|1646->634|1709->759|1746->769|1774->776|1809->784|1850->798|1865->804|1926->844|2085->975|2114->976|2253->1087|2282->1088|2420->1198|2449->1199|2487->1209|2516->1210|2597->1264|2625->1265|2671->1283|2700->1284
-                  LINES: 26->7|31->8|32->9|35->12|36->13|36->13|36->13|37->14|37->14|37->14|38->15|38->15|38->15|42->20|43->21|43->21|45->23|45->23|45->23|45->23|51->29|51->29|53->31|53->31|55->33|55->33|55->33|55->33|58->36|58->36|59->37|59->37
+                  HASH: 93b31901862cebebabcab3504469ce1ac26c00fa
+                  MATRIX: 987->260|1111->291|1138->292|1218->397|1254->406|1289->414|1315->419|1404->481|1419->487|1482->528|1570->589|1585->595|1646->634|1709->759|1746->769|1774->776|1809->784|1850->798|1865->804|1926->844
+                  LINES: 26->7|31->8|32->9|35->12|36->13|36->13|36->13|37->14|37->14|37->14|38->15|38->15|38->15|42->20|43->21|43->21|45->23|45->23|45->23|45->23
                   -- GENERATED --
               */
           

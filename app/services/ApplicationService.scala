@@ -14,9 +14,9 @@ import scala.concurrent.{ExecutionContext, Future}
 class ApplicationService @Inject()(dataRepository: TraitDataRepo)(implicit ec: ExecutionContext) {
 
 
-  def index(): Future[Either[APIError, Seq[JsValue]]] = {
+  def index(): Future[Either[APIError, Seq[DataModel]]] = {
     dataRepository.index().map{
-      case Right(books: Seq[DataModel]) => Right(books.map(book => Json.toJson(book)))
+      case Right(books: Seq[DataModel]) => Right(books)
       case Left(_) => Left(APIError.BadAPIResponse(404, "could not find books"))
     }
   }

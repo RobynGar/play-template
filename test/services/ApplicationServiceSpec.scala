@@ -27,6 +27,12 @@ class ApplicationServiceSpec extends BaseSpecWithApplication with MockFactory wi
     "test description",
     100
   )
+  private val dataModel2: DataModel = DataModel(
+    "blob",
+    "testname2",
+    "test description2",
+    10000
+  )
 
   private val updatedDataModel: DataModel = DataModel(
     "abcd",
@@ -39,11 +45,27 @@ class ApplicationServiceSpec extends BaseSpecWithApplication with MockFactory wi
     "updated field name"
   )
 
-  //  "ApplicationService .index()" should {
-  //    "receives a sequence of books" in {
-  //      (mockDataRepository.index())
-  //    }
-  //  }
+  private val dataModelSequence: Seq[DataModel] = Seq(dataModel, dataModel2)
+
+    "ApplicationService .index()" should {
+      "receives a sequence of books" in {
+        (() => mockDataRepository.index()).expects()
+          .returning(Future(Right(dataModelSequence)))
+
+        whenReady(UnitTestApplicationService.index()) {result =>
+          result shouldBe Right(dataModelSequence)
+        }
+      }
+
+      "receives a error from controller" in {
+        (() => mockDataRepository.index()).expects()
+          .returning(Future(Left(APIError.BadAPIResponse(404, "could not find books"))))
+
+        whenReady(UnitTestApplicationService.index()) {result =>
+          result shouldBe Left(APIError.BadAPIResponse(404, "could not find books"))
+        }
+      }
+    }
 
   "ApplicationService .create()" should {
 

@@ -16,28 +16,11 @@
     <p>Welcome to Play</p>
 
     <p class="lead mb-5">This project is deployed via Heroku.</p>
-
-    <div id="googleBooks"></div>
-
-    <script>
-
-        showBooks = books => {
-        const booksDiv = document.querySelector('#googleBooks');
-         books.forEach(book => {
-    const bookElement = document.createElement(‘p’);
-    bookElement.innerText = `book Title: ${book.title}`;
-    booksDiv.append(bookElement);
-
-  });
-        }
-
-       fetch('https://www.googleapis.com/books/v1/volumes?q=rowling%potter')
-       .then(response => response.json())
-       .then(books => showBooks(books.result));
-
-    </script>
+    <p><a href="/library/google/0738531367/mountain">click to maybe see a book</a></p>
 
     <h3>API Documentation</h3>
+
+
     <div class="justify-content-center">
       <table class="table">
         <thead>
@@ -47,6 +30,7 @@
           <th scope="col">Required Header</th>
           <th scope="col">Body</th>
         </tr>
+
         </thead>
         <tbody>
         <tr>

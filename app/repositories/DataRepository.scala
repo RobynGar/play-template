@@ -12,7 +12,6 @@ import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.duration.SECONDS
 import scala.concurrent.{ExecutionContext, Future}
 
 @ImplementedBy(classOf[DataRepository])
@@ -32,12 +31,11 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
   mongoComponent = mongoComponent,
   domainFormat = DataModel.formats,
   indexes = Seq(IndexModel(
-    Indexes.ascending("_id"),
-    IndexOptions().name("ttlIndex").unique(true).expireAfter(0, SECONDS))
+    Indexes.ascending("_id")
   )
-) with TraitDataRepo {
+)) with TraitDataRepo {
 
-  import scala.concurrent.duration.SECONDS
+
 
   def index(): Future[Either[APIError, Seq[DataModel]]]  =
     collection.find().toFuture().map{

@@ -2,16 +2,11 @@ package controllers
 
 import baseSpec.BaseSpecWithApplication
 import models.{DataModel, Field}
-import org.scalamock.scalatest.MockFactory
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.matchers.should.Matchers
-import play.api.test.FakeRequest
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{AnyContentAsEmpty, Result}
-import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, route, status}
-import repositories.DataRepository
-import services.{ApplicationService, LibraryService}
+import play.api.test.FakeRequest
+import play.api.test.Helpers.{contentAsJson, defaultAwaitTimeout, status}
 
 import scala.concurrent.Future
 
@@ -41,12 +36,18 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
     "test description",
     100
   )
+  private val googleDataModel: DataModel = DataModel(
+    "VpNa9UckT24C",
+    "Mountain View",
+    "Mountain View earned its name for its scenic vantage point between the Santa Cruz and Diablo ranges. Founded as a stagecoach stop along the El Camino Real in 1852, Mountain View became a diverse and bountiful agricultural community in the \"Valley of Heart's Delight.\" During the depths of the Depression, Bay Area citizens raised almost half a million dollars to purchase land north of town that was offered to the navy. The gamble paid off with the opening of Moffett Naval Air Station in 1933, inaugurating Mountain View's turn toward commercial and residential development. It was in an old apricot storage barn on San Antonio Road that William Shockley founded the first silicon manufacturing company in 1956, making it the true birthplace of the \"Silicon Valley.\"",
+    128
+  )
   private val updatedNumField: Field = Field(
-    "numSales",
+    "pageCount",
     "3500"
   )
   private val updatedField: Field = Field(
-    "name",
+    "title",
     "updated field name"
   )
 
@@ -243,9 +244,34 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
 
   }
 
+  "ApplicationController .getGoogleBook()" should {
+
+    "find a book in the database by search and term" in {
+      beforeEach()
+      val googleRequest: FakeRequest[AnyContentAsEmpty.type] = buildGet("/library/google/0738531367/mountain")
+      val googleResult= TestApplicationController.getGoogleBook("0738531367", "mountain")(googleRequest)
 
 
+      status(googleResult) shouldBe Status.OK
+      contentAsJson(googleResult) shouldBe Json.toJson(googleDataModel)
 
+      afterEach()
+    }
+
+    "unable to find a book in the database by search and term" in {
+      beforeEach()
+      val googleRequest: FakeRequest[AnyContentAsEmpty.type] = buildGet("/library/google/0738532/mountain")
+      val googleResult= TestApplicationController.getGoogleBook("0738532", "mountain")(googleRequest)
+
+
+      status(googleResult) shouldBe Status.BAD_REQUEST
+      contentAsJson(googleResult) shouldBe Json.toJson("could not validate book")
+
+
+      afterEach()
+    }
+
+  }
 
 
 

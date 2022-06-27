@@ -4,22 +4,22 @@ package services
 import models.{APIError, DataModel, Field}
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.Request
-import repositories.DataRepository
+import repositories.{DataRepository, TraitDataRepo}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
-class ApplicationService @Inject()(val dataRepository: DataRepository)(implicit val ec: ExecutionContext) {
+class ApplicationService @Inject()(dataRepository: TraitDataRepo)(implicit ec: ExecutionContext) {
 
 
-  def index(): Future[Either[APIError, Seq[JsValue]]] = {
-    dataRepository.collection.find().toFuture().map{
-      case books: Seq[DataModel] => Right(books.map(book => Json.toJson(book)))
-      case _ => Left(APIError.BadAPIResponse(404, "could not find books"))
+  def index(): Future[Either[APIError, Seq[DataModel]]] = {
+    dataRepository.index().map{
+      case Right(books: Seq[DataModel]) => Right(books)
+      case Left(_) => Left(APIError.BadAPIResponse(404, "could not find books"))
     }
-    }
+  }
 
 
 
@@ -56,9 +56,9 @@ class ApplicationService @Inject()(val dataRepository: DataRepository)(implicit 
 
   def updateField(id: String, input: Request[JsValue]): Future[Either[APIError, DataModel]] = {
     input.body.validate[Field] match {
-      case JsSuccess(field, _) if(field.fieldName == "name")=> dataRepository.updateField(id, "name", field.value)
+      case JsSuccess(field, _) if(field.fieldName == "title")=> dataRepository.updateField(id, "title", field.value)
       case JsSuccess(field, _) if(field.fieldName == "description")=> dataRepository.updateField(id, "description", field.value)
-      case JsSuccess(field, _) if(field.fieldName == "numSales")=> dataRepository.updateField(id, "numSales", field.value)
+      case JsSuccess(field, _) if(field.fieldName == "pageCount")=> dataRepository.updateField(id, "pageCount", field.value)
       case JsError(errors) => Future(Left(APIError.BadAPIResponse(400, "could not update book")))
     }
 

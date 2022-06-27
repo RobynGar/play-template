@@ -1,28 +1,45 @@
 package repositories
 
+import com.google.inject.ImplementedBy
 import models.{APIError, DataModel}
 import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters.{empty, equal}
 import org.mongodb.scala.model.Updates.set
 import org.mongodb.scala.model._
-import play.api.libs.json.JsValue
-import play.libs.Json
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
+@ImplementedBy(classOf[DataRepository])
+trait TraitDataRepo {
+  def index(): Future[Either[APIError, Seq[DataModel]]]
+  def create(book: DataModel): Future[Either[APIError, DataModel]]
+  def read(id: String): Future[Either[APIError, DataModel]]
+  def readName(id: String): Future[Either[APIError, DataModel]]
+  def update(id: String, book: DataModel): Future[Either[APIError, DataModel]]
+  def updateField(id: String, fieldName: String, value: String): Future[Either[APIError, DataModel]]
+  def delete(id: String): Future[Either[APIError, String]]
+}
+
 @Singleton
-class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: ExecutionContext) extends PlayMongoRepository[DataModel](
+class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: ExecutionContext) extends PlayMongoRepository[DataModel] (
   collectionName = "dataModels",
   mongoComponent = mongoComponent,
   domainFormat = DataModel.formats,
   indexes = Seq(IndexModel(
-    Indexes.ascending("_id")
-  )),
-  replaceIndexes = false
-) {
+    Indexes.ascending("id")
+  )
+)) with TraitDataRepo {
+
+
+
+  def index(): Future[Either[APIError, Seq[DataModel]]]  =
+    collection.find().toFuture().map{
+      case books: Seq[DataModel] => Right(books)
+      case _ => Left(APIError.BadAPIResponse(404, "could not find books"))
+    }
 
   def create(book: DataModel): Future[Either[APIError, DataModel]] =
     collection
@@ -37,12 +54,12 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
 
   private def byID(id: String): Bson =
     Filters.and(
-      Filters.equal("_id", id)
+      Filters.equal("id", id)
     )
 
   private def byName(name: String): Bson =
     Filters.and(
-      Filters.equal("name", name)
+      Filters.equal("title", name)
     )
 
  // val emptyBook = classOf[DataModel].newInstance()
@@ -74,8 +91,8 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
     }
 
   def updateField(id: String, fieldName: String, value: String): Future[Either[APIError, DataModel]]= {
-    if (fieldName == "numSales") {
-      collection.findOneAndUpdate(equal("_id", id),
+    if (fieldName == "pageCount") {
+      collection.findOneAndUpdate(equal("id", id),
         set(fieldName, value.toInt),
         options = FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
       ).toFutureOption().map {
@@ -83,7 +100,7 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
         case _ => Left(APIError.BadAPIResponse(400, "could not update book"))
       }
     } else {
-      collection.findOneAndUpdate(equal("_id", id),
+      collection.findOneAndUpdate(equal("id", id),
         set(fieldName, value),
         options = FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
       ).toFutureOption().map {

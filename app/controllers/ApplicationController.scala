@@ -1,13 +1,11 @@
 package controllers
 
-import models.{APIError, DataModel}
-import play.api.libs.json.{JsError, JsObject, JsSuccess, JsValue, Json}
+import models.DataModel
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
-import repositories.DataRepository
 import services.{ApplicationService, LibraryService}
-
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 
 
@@ -16,7 +14,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 //implicit executive context is used for async operations like map/flatMap. executionContext is another name for ThreadPool
   def index(): Action[AnyContent] = Action.async { implicit request =>
     applicationService.index().map{
-      case Right(book: Seq[JsValue]) => Ok(Json.toJson(book))
+      case Right(book: Seq[DataModel]) => Ok(Json.toJson(book))
       case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }
   }
@@ -37,7 +35,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 
   def read(id: String): Action[AnyContent] = Action.async { implicit request =>
     applicationService.read(id).map{
-      case Right(book: DataModel) => Ok(DataModel.formats.writes(book))
+      case Right(book: DataModel) => Ok(Json.toJson(book))
       case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }
 //     dataRepository.read(id).map{

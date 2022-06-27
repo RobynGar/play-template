@@ -16,7 +16,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{DELETE, GET, POST, PUT}
 import repositories.DataRepository
 import services.{ApplicationService, LibraryService}
-
 import scala.concurrent.ExecutionContext
 
 trait BaseSpec extends AnyWordSpec with Matchers

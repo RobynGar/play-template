@@ -15,7 +15,7 @@ import scala.concurrent.Future
 
 class ApplicationServiceSpec extends BaseSpecWithApplication with MockFactory with EitherValues with FutureAwaits with DefaultAwaitTimeout with IntegrationPatience {
 
-  val mockDataRepository = mock[TraitDataRepo]
+  val mockDataRepository: TraitDataRepo = mock[TraitDataRepo]
 
   val UnitTestApplicationService = new ApplicationService(
     mockDataRepository
@@ -41,7 +41,7 @@ class ApplicationServiceSpec extends BaseSpecWithApplication with MockFactory wi
     100
   )
   private val updatedField: Field = Field(
-    "name",
+    "title",
     "updated field name"
   )
 

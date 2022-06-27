@@ -4,9 +4,8 @@ import models.DataModel
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 import services.{ApplicationService, LibraryService}
-
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 
 
@@ -36,7 +35,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 
   def read(id: String): Action[AnyContent] = Action.async { implicit request =>
     applicationService.read(id).map{
-      case Right(book: DataModel) => Ok(DataModel.formats.writes(book))
+      case Right(book: DataModel) => Ok(Json.toJson(book))
       case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }
 //     dataRepository.read(id).map{

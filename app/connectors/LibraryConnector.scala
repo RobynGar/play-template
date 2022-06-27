@@ -41,13 +41,13 @@ class LibraryConnector @Inject()(ws: WSClient) {
                       val errorMessage = errors.map {
                         case (_, es) => es.toString()
                       }.flatten.mkString("/n")
-                      Left(APIError.JsonError(400, errorMessage))
+                      Left(APIError.JsonError(400, "could not validate book"))
                   }
 
       } //first we try to parse the response from a json body to a DataModel if that does not work we move on to recover step
-        .recover{ case _: WSResponse =>
-          Left(APIError.BadAPIResponse(500, "Could not connect"))
-        } // this will give us our custom error Future[APIError] telling us it has been unable to get the book we requested
+//        .recover{ case _: WSResponse =>
+//          Left(APIError.BadAPIResponse(500, "Could not connect"))
+//        } // this will give us our custom error Future[APIError] telling us it has been unable to get the book we requested
     }
   }
 

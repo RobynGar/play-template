@@ -21,7 +21,8 @@ val httpResponseStatus: Int,
     )
     final case class JsonError(status: Int, message: String)
       extends APIError(
-        status, message
+        status,
+        message
       )
 
   }

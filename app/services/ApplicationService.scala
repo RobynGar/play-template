@@ -56,9 +56,9 @@ class ApplicationService @Inject()(dataRepository: TraitDataRepo)(implicit ec: E
 
   def updateField(id: String, input: Request[JsValue]): Future[Either[APIError, DataModel]] = {
     input.body.validate[Field] match {
-      case JsSuccess(field, _) if(field.fieldName == "name")=> dataRepository.updateField(id, "name", field.value)
+      case JsSuccess(field, _) if(field.fieldName == "title")=> dataRepository.updateField(id, "title", field.value)
       case JsSuccess(field, _) if(field.fieldName == "description")=> dataRepository.updateField(id, "description", field.value)
-      case JsSuccess(field, _) if(field.fieldName == "numSales")=> dataRepository.updateField(id, "numSales", field.value)
+      case JsSuccess(field, _) if(field.fieldName == "pageCount")=> dataRepository.updateField(id, "pageCount", field.value)
       case JsError(errors) => Future(Left(APIError.BadAPIResponse(400, "could not update book")))
     }
 

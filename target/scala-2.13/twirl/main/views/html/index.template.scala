@@ -40,7 +40,9 @@ Seq[Any](format.raw/*2.1*/("""
     <p>Welcome to Play</p>
 
     <p class="lead mb-5">This project is deployed via Heroku.</p>
-    <p><a href="/library/google/0738531367/mountain">click to maybe see a book</a></p>
+<!--    <a href=""""),_display_(/*19.19*/routes/*19.25*/.Assets.versioned("views/book.scala.html")),format.raw/*19.67*/(""""></a>-->
+    <p><a href="/library/google/0738531367/mountain">Mountain View</a></p>
+    <p><a href="/library/google/0747594562/potter">Harry Potter</a></p>
 
     <h3>API Documentation</h3>
 
@@ -109,7 +111,7 @@ Seq[Any](format.raw/*2.1*/("""
   </div>
 
 </div>
-""")))}),format.raw/*88.2*/("""
+""")))}),format.raw/*90.2*/("""
 """))
       }
     }
@@ -126,11 +128,11 @@ Seq[Any](format.raw/*2.1*/("""
 
               /*
                   -- GENERATED --
-                  DATE: 2022-06-23T14:11:54.164
+                  DATE: 2022-06-24T14:59:46.581
                   SOURCE: /Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/app/views/index.scala.html
-                  HASH: 05d7f0f7c527cfac256652b35e66eed31c59501c
-                  MATRIX: 722->1|818->4|845->6|880->33|919->35|947->37|3213->2273
-                  LINES: 21->1|26->2|27->3|27->3|27->3|29->5|112->88
+                  HASH: 0bcaae306ca705a3d0798c7782d84903e8ea1252
+                  MATRIX: 722->1|818->4|845->6|880->33|919->35|947->37|1533->596|1548->602|1611->644|3406->2409
+                  LINES: 21->1|26->2|27->3|27->3|27->3|29->5|43->19|43->19|43->19|114->90
                   -- GENERATED --
               */
           

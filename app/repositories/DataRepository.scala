@@ -6,8 +6,6 @@ import org.mongodb.scala.bson.conversions.Bson
 import org.mongodb.scala.model.Filters.{empty, equal}
 import org.mongodb.scala.model.Updates.set
 import org.mongodb.scala.model._
-import play.api.libs.json.{JsValue, Json}
-import play.libs.Json
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 
@@ -31,7 +29,7 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
   mongoComponent = mongoComponent,
   domainFormat = DataModel.formats,
   indexes = Seq(IndexModel(
-    Indexes.ascending("_id")
+    Indexes.ascending("id")
   )
 )) with TraitDataRepo {
 
@@ -56,12 +54,12 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
 
   private def byID(id: String): Bson =
     Filters.and(
-      Filters.equal("_id", id)
+      Filters.equal("id", id)
     )
 
   private def byName(name: String): Bson =
     Filters.and(
-      Filters.equal("name", name)
+      Filters.equal("title", name)
     )
 
  // val emptyBook = classOf[DataModel].newInstance()
@@ -93,8 +91,8 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
     }
 
   def updateField(id: String, fieldName: String, value: String): Future[Either[APIError, DataModel]]= {
-    if (fieldName == "numSales") {
-      collection.findOneAndUpdate(equal("_id", id),
+    if (fieldName == "pageCount") {
+      collection.findOneAndUpdate(equal("id", id),
         set(fieldName, value.toInt),
         options = FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
       ).toFutureOption().map {
@@ -102,7 +100,7 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
         case _ => Left(APIError.BadAPIResponse(400, "could not update book"))
       }
     } else {
-      collection.findOneAndUpdate(equal("_id", id),
+      collection.findOneAndUpdate(equal("id", id),
         set(fieldName, value),
         options = FindOneAndUpdateOptions().returnDocument(ReturnDocument.AFTER)
       ).toFutureOption().map {

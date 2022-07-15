@@ -19,6 +19,13 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
     }
   }
 
+  def showBook(search: String, term: String): Action[AnyContent] = Action.async { implicit request =>
+    libraryService.getGoogleBook(search = search, term = term).value.map{
+      case Right(book: DataModel) => Ok(views.html.book(book))
+      case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
+    }
+  }
+
   def create(): Action[JsValue] = Action.async(parse.json) { implicit request =>
     applicationService.create(request).map {
       case Right(value) => Created(Json.toJson(value))
@@ -30,7 +37,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
 //      case JsSuccess(dataModel, _) =>
 //        dataRepository.create(dataModel).map(_ => Created)
 //      case JsError(_) => Future(BadRequest)
-//    }
+//    }sbt
 
 
   def read(id: String): Action[AnyContent] = Action.async { implicit request =>

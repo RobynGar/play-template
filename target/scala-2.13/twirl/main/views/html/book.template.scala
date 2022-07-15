@@ -14,44 +14,44 @@ import views.html._
 import play.api.templates.PlayMagic._
 import play.api.mvc._
 import play.api.data._
+/*1.2*/import models.DataModel
 
-object book extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template0[play.twirl.api.HtmlFormat.Appendable] {
+object book extends _root_.play.twirl.api.BaseScalaTemplate[play.twirl.api.HtmlFormat.Appendable,_root_.play.twirl.api.Format[play.twirl.api.HtmlFormat.Appendable]](play.twirl.api.HtmlFormat) with _root_.play.twirl.api.Template1[DataModel,play.twirl.api.HtmlFormat.Appendable] {
 
   /**/
-  def apply():play.twirl.api.HtmlFormat.Appendable = {
+  def apply/*2.2*/(book: DataModel):play.twirl.api.HtmlFormat.Appendable = {
     _display_ {
       {
 
 
-Seq[Any](format.raw/*1.1*/("""<!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+Seq[Any](format.raw/*3.1*/("""
+"""),format.raw/*4.1*/("""<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-  <title>Google Books Embedded Viewer API Example</title>
-  <script type="text/javascript" src="https://www.google.com/books/jsapi.js"></script>
-  <script type="text/javascript">
-      google.books.load();
-
-      function initialize() """),format.raw/*11.29*/("""{"""),format.raw/*11.30*/("""
-        """),format.raw/*12.9*/("""var viewer = new google.books.DefaultViewer(document.getElementById('viewerCanvas'));
-        viewer.load('ISBN:0738531367');
-      """),format.raw/*14.7*/("""}"""),format.raw/*14.8*/("""
-
-      """),format.raw/*16.7*/("""google.books.setOnLoadCallback(initialize);
-    </script>
+  <meta charset="UTF-8">
+  <title>book</title>
 </head>
 <body>
-<div id="viewerCanvas" style="width: 600px; height: 500px"></div>
+<h1>DB Book</h1>
+<div>
+
+  <ul>
+    <h3>"""),_display_(/*15.10*/book/*15.14*/.title),format.raw/*15.20*/("""</h3>
+    <li>ID: """),_display_(/*16.14*/book/*16.18*/.id),format.raw/*16.21*/("""</li>
+    <li>Description: """),_display_(/*17.23*/book/*17.27*/.description),format.raw/*17.39*/("""</li>
+    <li>Page Count: """),_display_(/*18.22*/book/*18.26*/.pageCount),format.raw/*18.36*/("""</li>
+  </ul>
+
+</div>
 </body>
 </html>"""))
       }
     }
   }
 
-  def render(): play.twirl.api.HtmlFormat.Appendable = apply()
+  def render(book:DataModel): play.twirl.api.HtmlFormat.Appendable = apply(book)
 
-  def f:(() => play.twirl.api.HtmlFormat.Appendable) = () => apply()
+  def f:((DataModel) => play.twirl.api.HtmlFormat.Appendable) = (book) => apply(book)
 
   def ref: this.type = this
 
@@ -60,11 +60,11 @@ Seq[Any](format.raw/*1.1*/("""<!DOCTYPE html "-//W3C//DTD XHTML 1.0 Strict//EN"
 
               /*
                   -- GENERATED --
-                  DATE: 2022-06-24T14:51:37.849
+                  DATE: 2022-07-15T14:43:48.205
                   SOURCE: /Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/app/views/book.scala.html
-                  HASH: 271738463330b872d6850ffe590d24d6e8d405a6
-                  MATRIX: 810->0|1306->468|1335->469|1371->478|1530->610|1558->611|1593->619
-                  LINES: 26->1|36->11|36->11|37->12|39->14|39->14|41->16
+                  HASH: d5387e5730ef04702efe3af81b7ed427102b6b78
+                  MATRIX: 432->1|762->26|873->44|900->45|1069->187|1082->191|1109->197|1155->216|1168->220|1192->223|1247->251|1260->255|1293->267|1347->294|1360->298|1391->308
+                  LINES: 17->1|22->2|27->3|28->4|39->15|39->15|39->15|40->16|40->16|40->16|41->17|41->17|41->17|42->18|42->18|42->18
                   -- GENERATED --
               */
           

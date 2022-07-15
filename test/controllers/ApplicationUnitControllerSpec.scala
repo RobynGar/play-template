@@ -51,15 +51,19 @@ class ApplicationUnitControllerSpec extends BaseSpecWithApplication with MockFac
     "test description",
     100
   )
+  private val dataModelSequence: Seq[DataModel] = Seq(dataModel)
 
-//  "ApplicationController unit test .index()" should {
-//
-//    val result = unitTestController.index()(FakeRequest())
-//    (mockServiceLayer.index()).
-//    "return" in {
-//      status(result) shouldBe Status.OK
-//    }
-//  }
+  "ApplicationController unit test .index()" should {
+
+    "return" in {
+      val result: FakeRequest[AnyContent] = buildGet("/api")
+      (() => mockServiceLayer.index()).expects().returning(Future(Right(dataModelSequence))).once()
+      val indexResult: Future[Result] = unitTestController.index()(result)
+
+      status(indexResult) shouldBe Status.OK
+      contentAsJson(indexResult).as[Seq[DataModel]] shouldBe dataModelSequence
+    }
+  }
 
   "ApplicationController unit test .create()" should {
     "create a book in the database" in {

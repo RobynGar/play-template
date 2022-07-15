@@ -1,15 +1,4 @@
-[0m[[0m[33mwarn[0m] [0m[0m/Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/app/repositories/DataRepository.scala:68:31: Auto-application to `()` is deprecated. Supply the empty argument list `()` explicitly to invoke method headOption,[0m
-[0m[[0m[33mwarn[0m] [0m[0mor remove the empty argument list from its definition (Java-defined methods are exempt).[0m
-[0m[[0m[33mwarn[0m] [0m[0mIn Scala 3, an unapplied method like this will be eta-expanded into a function.[0m
-[0m[[0m[33mwarn[0m] [0m[0m    collection.find(byID(id)).headOption flatMap {[0m
-[0m[[0m[33mwarn[0m] [0m[0m                              ^[0m
-[0m[[0m[33mwarn[0m] [0m[0m/Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/app/repositories/DataRepository.scala:76:35: Auto-application to `()` is deprecated. Supply the empty argument list `()` explicitly to invoke method headOption,[0m
-[0m[[0m[33mwarn[0m] [0m[0mor remove the empty argument list from its definition (Java-defined methods are exempt).[0m
-[0m[[0m[33mwarn[0m] [0m[0mIn Scala 3, an unapplied method like this will be eta-expanded into a function.[0m
-[0m[[0m[33mwarn[0m] [0m[0m    collection.find(byName(name)).headOption flatMap {[0m
-[0m[[0m[33mwarn[0m] [0m[0m                                  ^[0m
-[0m[[0m[33mwarn[0m] [0m[0m/Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/app/services/ApplicationService.scala:58:24: match may not be exhaustive.[0m
-[0m[[0m[33mwarn[0m] [0m[0mIt would fail on the following input: JsSuccess(_, _)[0m
-[0m[[0m[33mwarn[0m] [0m[0m    input.body.validate[Field] match {[0m
-[0m[[0m[33mwarn[0m] [0m[0m                       ^[0m
-[0m[[0m[33mwarn[0m] [0m[0mthree warnings found[0m
+[0m[[0m[31merror[0m] [0m[0m/Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/conf/routes:7:1: value addFromApi is not a member of controllers.ApplicationController[0m
+[0m[[0m[31merror[0m] [0m[0mdid you mean addFromAPI?[0m
+[0m[[0m[31merror[0m] [0m[0mGET     /api/addGoogle/:search/:term               controllers.ApplicationController.addFromApi(search: String, term: String)[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m

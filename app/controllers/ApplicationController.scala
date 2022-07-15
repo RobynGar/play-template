@@ -1,9 +1,10 @@
 package controllers
 
-import models.DataModel
+import models.{APIError, DataModel}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
 import services.{ApplicationService, LibraryService}
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
@@ -24,6 +25,21 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
       case Right(book: DataModel) => Ok(views.html.book(book))
       case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }
+  }
+  
+
+  def showDBBook(id: String): Action[AnyContent] = Action.async { implicit request =>
+    applicationService.read(id).map{
+      case Right(book: DataModel) => Ok(views.html.book(book))
+      case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
+    }
+  }
+
+  def addFromApi(search: String, term: String): Action[AnyContent] = Action.async { implicit request =>
+    libraryService.addApiUser(search = search, term = term).map{
+        case Right(book: DataModel) => Created(Json.toJson(book))
+        case Left(error: APIError) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
+      }
   }
 
   def create(): Action[JsValue] = Action.async(parse.json) { implicit request =>

@@ -1,6 +1,6 @@
 // @GENERATOR:play-routes-compiler
 // @SOURCE:/Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/conf/routes
-// @DATE:Fri Jul 15 14:52:49 BST 2022
+// @DATE:Fri Jul 15 15:28:34 BST 2022
 
 package router
 
@@ -17,7 +17,7 @@ class Routes(
   HomeController_2: controllers.HomeController,
   // @LINE:3
   ApplicationController_0: controllers.ApplicationController,
-  // @LINE:13
+  // @LINE:15
   Assets_1: controllers.Assets,
   val prefix: String
 ) extends GeneratedRouter {
@@ -28,7 +28,7 @@ class Routes(
     HomeController_2: controllers.HomeController,
     // @LINE:3
     ApplicationController_0: controllers.ApplicationController,
-    // @LINE:13
+    // @LINE:15
     Assets_1: controllers.Assets
   ) = this(errorHandler, HomeController_2, ApplicationController_0, Assets_1, "/")
 
@@ -47,13 +47,15 @@ class Routes(
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api""", """controllers.ApplicationController.index()"""),
     ("""POST""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/create""", """controllers.ApplicationController.create()"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/""" + "$" + """id<[^/]+>""", """controllers.ApplicationController.read(id:String)"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/dbbook/""" + "$" + """id<[^/]+>""", """controllers.ApplicationController.showDBBook(id:String)"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/showBook/""" + "$" + """search<[^/]+>/""" + "$" + """term<[^/]+>""", """controllers.ApplicationController.showBook(search:String, term:String)"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/addGoogle/""" + "$" + """search<[^/]+>/""" + "$" + """term<[^/]+>""", """controllers.ApplicationController.addFromApi(search:String, term:String)"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/name/""" + "$" + """name<[^/]+>""", """controllers.ApplicationController.readName(name:String)"""),
     ("""PUT""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/""" + "$" + """id<[^/]+>""", """controllers.ApplicationController.update(id:String)"""),
     ("""PUT""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/update/""" + "$" + """id<[^/]+>""", """controllers.ApplicationController.updateField(id:String)"""),
     ("""DELETE""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """api/""" + "$" + """id<[^/]+>""", """controllers.ApplicationController.delete(id:String)"""),
     ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """assets/""" + "$" + """file<.+>""", """controllers.Assets.versioned(path:String = "/public", file:Asset)"""),
-    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """library/google/""" + "$" + """search<[^/]+>/""" + "$" + """term<[^/]+>""", """controllers.ApplicationController.getGoogleBook(search:String, term:String)"""),
+    ("""GET""", this.prefix + (if(this.prefix.endsWith("/")) "" else "/") + """library/getGoogle/""" + "$" + """search<[^/]+>/""" + "$" + """term<[^/]+>""", """controllers.ApplicationController.getGoogleBook(search:String, term:String)"""),
     Nil
   ).foldLeft(List.empty[(String,String,String)]) { (s,e) => e.asInstanceOf[Any] match {
     case r @ (_,_,_) => s :+ r.asInstanceOf[(String,String,String)]
@@ -134,10 +136,28 @@ class Routes(
   )
 
   // @LINE:6
-  private[this] lazy val controllers_ApplicationController_showBook4_route = Route("GET",
+  private[this] lazy val controllers_ApplicationController_showDBBook4_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/dbbook/"), DynamicPart("id", """[^/]+""",true)))
+  )
+  private[this] lazy val controllers_ApplicationController_showDBBook4_invoker = createInvoker(
+    ApplicationController_0.showDBBook(fakeValue[String]),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.ApplicationController",
+      "showDBBook",
+      Seq(classOf[String]),
+      "GET",
+      this.prefix + """api/dbbook/""" + "$" + """id<[^/]+>""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:7
+  private[this] lazy val controllers_ApplicationController_showBook5_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/showBook/"), DynamicPart("search", """[^/]+""",true), StaticPart("/"), DynamicPart("term", """[^/]+""",true)))
   )
-  private[this] lazy val controllers_ApplicationController_showBook4_invoker = createInvoker(
+  private[this] lazy val controllers_ApplicationController_showBook5_invoker = createInvoker(
     ApplicationController_0.showBook(fakeValue[String], fakeValue[String]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -151,11 +171,29 @@ class Routes(
     )
   )
 
-  // @LINE:7
-  private[this] lazy val controllers_ApplicationController_readName5_route = Route("GET",
+  // @LINE:8
+  private[this] lazy val controllers_ApplicationController_addFromApi6_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/addGoogle/"), DynamicPart("search", """[^/]+""",true), StaticPart("/"), DynamicPart("term", """[^/]+""",true)))
+  )
+  private[this] lazy val controllers_ApplicationController_addFromApi6_invoker = createInvoker(
+    ApplicationController_0.addFromApi(fakeValue[String], fakeValue[String]),
+    play.api.routing.HandlerDef(this.getClass.getClassLoader,
+      "router",
+      "controllers.ApplicationController",
+      "addFromApi",
+      Seq(classOf[String], classOf[String]),
+      "GET",
+      this.prefix + """api/addGoogle/""" + "$" + """search<[^/]+>/""" + "$" + """term<[^/]+>""",
+      """""",
+      Seq()
+    )
+  )
+
+  // @LINE:9
+  private[this] lazy val controllers_ApplicationController_readName7_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/name/"), DynamicPart("name", """[^/]+""",true)))
   )
-  private[this] lazy val controllers_ApplicationController_readName5_invoker = createInvoker(
+  private[this] lazy val controllers_ApplicationController_readName7_invoker = createInvoker(
     ApplicationController_0.readName(fakeValue[String]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -169,11 +207,11 @@ class Routes(
     )
   )
 
-  // @LINE:8
-  private[this] lazy val controllers_ApplicationController_update6_route = Route("PUT",
+  // @LINE:10
+  private[this] lazy val controllers_ApplicationController_update8_route = Route("PUT",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/"), DynamicPart("id", """[^/]+""",true)))
   )
-  private[this] lazy val controllers_ApplicationController_update6_invoker = createInvoker(
+  private[this] lazy val controllers_ApplicationController_update8_invoker = createInvoker(
     ApplicationController_0.update(fakeValue[String]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -187,11 +225,11 @@ class Routes(
     )
   )
 
-  // @LINE:9
-  private[this] lazy val controllers_ApplicationController_updateField7_route = Route("PUT",
+  // @LINE:11
+  private[this] lazy val controllers_ApplicationController_updateField9_route = Route("PUT",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/update/"), DynamicPart("id", """[^/]+""",true)))
   )
-  private[this] lazy val controllers_ApplicationController_updateField7_invoker = createInvoker(
+  private[this] lazy val controllers_ApplicationController_updateField9_invoker = createInvoker(
     ApplicationController_0.updateField(fakeValue[String]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -205,11 +243,11 @@ class Routes(
     )
   )
 
-  // @LINE:10
-  private[this] lazy val controllers_ApplicationController_delete8_route = Route("DELETE",
+  // @LINE:12
+  private[this] lazy val controllers_ApplicationController_delete10_route = Route("DELETE",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("api/"), DynamicPart("id", """[^/]+""",true)))
   )
-  private[this] lazy val controllers_ApplicationController_delete8_invoker = createInvoker(
+  private[this] lazy val controllers_ApplicationController_delete10_invoker = createInvoker(
     ApplicationController_0.delete(fakeValue[String]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -223,11 +261,11 @@ class Routes(
     )
   )
 
-  // @LINE:13
-  private[this] lazy val controllers_Assets_versioned9_route = Route("GET",
+  // @LINE:15
+  private[this] lazy val controllers_Assets_versioned11_route = Route("GET",
     PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("assets/"), DynamicPart("file", """.+""",false)))
   )
-  private[this] lazy val controllers_Assets_versioned9_invoker = createInvoker(
+  private[this] lazy val controllers_Assets_versioned11_invoker = createInvoker(
     Assets_1.versioned(fakeValue[String], fakeValue[Asset]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -241,11 +279,11 @@ class Routes(
     )
   )
 
-  // @LINE:16
-  private[this] lazy val controllers_ApplicationController_getGoogleBook10_route = Route("GET",
-    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("library/google/"), DynamicPart("search", """[^/]+""",true), StaticPart("/"), DynamicPart("term", """[^/]+""",true)))
+  // @LINE:18
+  private[this] lazy val controllers_ApplicationController_getGoogleBook12_route = Route("GET",
+    PathPattern(List(StaticPart(this.prefix), StaticPart(this.defaultPrefix), StaticPart("library/getGoogle/"), DynamicPart("search", """[^/]+""",true), StaticPart("/"), DynamicPart("term", """[^/]+""",true)))
   )
-  private[this] lazy val controllers_ApplicationController_getGoogleBook10_invoker = createInvoker(
+  private[this] lazy val controllers_ApplicationController_getGoogleBook12_invoker = createInvoker(
     ApplicationController_0.getGoogleBook(fakeValue[String], fakeValue[String]),
     play.api.routing.HandlerDef(this.getClass.getClassLoader,
       "router",
@@ -253,7 +291,7 @@ class Routes(
       "getGoogleBook",
       Seq(classOf[String], classOf[String]),
       "GET",
-      this.prefix + """library/google/""" + "$" + """search<[^/]+>/""" + "$" + """term<[^/]+>""",
+      this.prefix + """library/getGoogle/""" + "$" + """search<[^/]+>/""" + "$" + """term<[^/]+>""",
       """""",
       Seq()
     )
@@ -287,45 +325,57 @@ class Routes(
       }
   
     // @LINE:6
-    case controllers_ApplicationController_showBook4_route(params@_) =>
-      call(params.fromPath[String]("search", None), params.fromPath[String]("term", None)) { (search, term) =>
-        controllers_ApplicationController_showBook4_invoker.call(ApplicationController_0.showBook(search, term))
+    case controllers_ApplicationController_showDBBook4_route(params@_) =>
+      call(params.fromPath[String]("id", None)) { (id) =>
+        controllers_ApplicationController_showDBBook4_invoker.call(ApplicationController_0.showDBBook(id))
       }
   
     // @LINE:7
-    case controllers_ApplicationController_readName5_route(params@_) =>
-      call(params.fromPath[String]("name", None)) { (name) =>
-        controllers_ApplicationController_readName5_invoker.call(ApplicationController_0.readName(name))
+    case controllers_ApplicationController_showBook5_route(params@_) =>
+      call(params.fromPath[String]("search", None), params.fromPath[String]("term", None)) { (search, term) =>
+        controllers_ApplicationController_showBook5_invoker.call(ApplicationController_0.showBook(search, term))
       }
   
     // @LINE:8
-    case controllers_ApplicationController_update6_route(params@_) =>
-      call(params.fromPath[String]("id", None)) { (id) =>
-        controllers_ApplicationController_update6_invoker.call(ApplicationController_0.update(id))
+    case controllers_ApplicationController_addFromApi6_route(params@_) =>
+      call(params.fromPath[String]("search", None), params.fromPath[String]("term", None)) { (search, term) =>
+        controllers_ApplicationController_addFromApi6_invoker.call(ApplicationController_0.addFromApi(search, term))
       }
   
     // @LINE:9
-    case controllers_ApplicationController_updateField7_route(params@_) =>
-      call(params.fromPath[String]("id", None)) { (id) =>
-        controllers_ApplicationController_updateField7_invoker.call(ApplicationController_0.updateField(id))
+    case controllers_ApplicationController_readName7_route(params@_) =>
+      call(params.fromPath[String]("name", None)) { (name) =>
+        controllers_ApplicationController_readName7_invoker.call(ApplicationController_0.readName(name))
       }
   
     // @LINE:10
-    case controllers_ApplicationController_delete8_route(params@_) =>
+    case controllers_ApplicationController_update8_route(params@_) =>
       call(params.fromPath[String]("id", None)) { (id) =>
-        controllers_ApplicationController_delete8_invoker.call(ApplicationController_0.delete(id))
+        controllers_ApplicationController_update8_invoker.call(ApplicationController_0.update(id))
       }
   
-    // @LINE:13
-    case controllers_Assets_versioned9_route(params@_) =>
+    // @LINE:11
+    case controllers_ApplicationController_updateField9_route(params@_) =>
+      call(params.fromPath[String]("id", None)) { (id) =>
+        controllers_ApplicationController_updateField9_invoker.call(ApplicationController_0.updateField(id))
+      }
+  
+    // @LINE:12
+    case controllers_ApplicationController_delete10_route(params@_) =>
+      call(params.fromPath[String]("id", None)) { (id) =>
+        controllers_ApplicationController_delete10_invoker.call(ApplicationController_0.delete(id))
+      }
+  
+    // @LINE:15
+    case controllers_Assets_versioned11_route(params@_) =>
       call(Param[String]("path", Right("/public")), params.fromPath[Asset]("file", None)) { (path, file) =>
-        controllers_Assets_versioned9_invoker.call(Assets_1.versioned(path, file))
+        controllers_Assets_versioned11_invoker.call(Assets_1.versioned(path, file))
       }
   
-    // @LINE:16
-    case controllers_ApplicationController_getGoogleBook10_route(params@_) =>
+    // @LINE:18
+    case controllers_ApplicationController_getGoogleBook12_route(params@_) =>
       call(params.fromPath[String]("search", None), params.fromPath[String]("term", None)) { (search, term) =>
-        controllers_ApplicationController_getGoogleBook10_invoker.call(ApplicationController_0.getGoogleBook(search, term))
+        controllers_ApplicationController_getGoogleBook12_invoker.call(ApplicationController_0.getGoogleBook(search, term))
       }
   }
 }

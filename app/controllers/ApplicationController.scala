@@ -26,7 +26,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
       case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }
   }
-  
+
 
   def showDBBook(id: String): Action[AnyContent] = Action.async { implicit request =>
     applicationService.read(id).map{

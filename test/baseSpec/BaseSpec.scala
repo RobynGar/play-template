@@ -1,6 +1,7 @@
 package baseSpec
 
 import akka.stream.Materializer
+import connectors.LibraryConnector
 import org.scalatest.concurrent.{Eventually, ScalaFutures}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -16,6 +17,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{DELETE, GET, POST, PUT}
 import repositories.DataRepository
 import services.{ApplicationService, LibraryService}
+
 import scala.concurrent.ExecutionContext
 
 trait BaseSpec extends AnyWordSpec with Matchers
@@ -29,7 +31,7 @@ trait BaseSpecWithApplication extends BaseSpec with GuiceOneServerPerSuite with 
   lazy val repository: DataRepository = injector.instanceOf[DataRepository]
   lazy val service: LibraryService = injector.instanceOf[LibraryService]
   lazy val serviceLayer: ApplicationService = injector.instanceOf[ApplicationService]
-  //lazy val connector: LibraryConnector = injector.instanceOf[LibraryConnector]
+  lazy val connector: LibraryConnector = injector.instanceOf[LibraryConnector]
 
   implicit val messagesApi = app.injector.instanceOf[MessagesApi]
   lazy val injector: Injector = app.injector

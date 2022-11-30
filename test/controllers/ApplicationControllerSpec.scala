@@ -22,8 +22,7 @@ class ApplicationControllerSpec extends BaseSpecWithApplication {
     serviceLayer,
     service
   )
-
-
+  
   private val dataModel: DataModel = DataModel(
     "abcd",
     "testname",

@@ -65,7 +65,7 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
  // val emptyBook = classOf[DataModel].newInstance()
 
   def read(id: String): Future[Either[APIError, DataModel]] = {
-    collection.find(byID(id)).headOption flatMap {
+    collection.find(byID(id)).headOption() flatMap {
       case Some(data) =>
         Future(Right(data))
       case _ => Future(Left(APIError.BadAPIResponse(404, "could not read book")))
@@ -73,7 +73,7 @@ class DataRepository @Inject()(mongoComponent: MongoComponent)(implicit ec: Exec
   }
 
   def readName(name: String): Future[Either[APIError, DataModel]] = {
-    collection.find(byName(name)).headOption flatMap {
+    collection.find(byName(name)).headOption() flatMap {
       case Some(data) =>
         Future(Right(data))
       case _ => Future(Left(APIError.BadAPIResponse(404, "could not read book")))

@@ -1,19 +1,22 @@
 package controllers
 
+
+import models.DataModel.bookForm
 import models.{APIError, DataModel}
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents}
+import play.api.mvc.{Action, AnyContent, BaseController, ControllerComponents, Request}
 import services.{ApplicationService, LibraryService}
+import views.html.helper.CSRF
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 
 
 @Singleton
-class ApplicationController @Inject()(val controllerComponents: ControllerComponents, val applicationService: ApplicationService, val libraryService: LibraryService)(implicit val ec: ExecutionContext) extends BaseController {
+class ApplicationController @Inject()(val controllerComponents: ControllerComponents, val applicationService: ApplicationService, val libraryService: LibraryService)(implicit val ec: ExecutionContext) extends BaseController with play.api.i18n.I18nSupport{
 //implicit executive context is used for async operations like map/flatMap. executionContext is another name for ThreadPool
-  def index(): Action[AnyContent] = Action.async { implicit request =>
+  def index(): Action[AnyContent] = Action.async { request =>
     applicationService.index().map{
       case Right(book: Seq[DataModel]) => Ok(Json.toJson(book))
       case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
@@ -43,7 +46,7 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
   }
 
   def create(): Action[JsValue] = Action.async(parse.json) { implicit request =>
-    applicationService.create(request).map {
+    applicationService.create.map {
       case Right(value) => Created(Json.toJson(value))
       case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
     }
@@ -118,7 +121,28 @@ class ApplicationController @Inject()(val controllerComponents: ControllerCompon
      case Right(book) => Ok(Json.toJson(book))
      case Left(error) => Status(error.httpResponseStatus)(Json.toJson(error.reason))
    }
+  }
+  def accessToken(implicit request: Request[_]) = {
+    CSRF.getToken
+  }
 
+  def addNewBook(): Action[AnyContent] = Action { implicit request =>
+    Ok(views.html.addBook(DataModel.bookForm))
+  }
+
+  def addBookForm(): Action[AnyContent] =  Action.async {implicit request =>
+    accessToken
+    bookForm.bindFromRequest().fold(
+      formWithErrors => {
+        Future(BadRequest(formWithErrors.errors.toString))
+      },
+      formData => {
+        applicationService.addNewBook(DataModel(formData.id, formData.title, formData.description, formData.pageCount)).map {
+          case Left(error) => BadRequest(Json.toJson(error.reason))
+          case Right(book) => Redirect(routes.ApplicationController.showDBBook(book.id))
+        }
+      }
+    )
   }
 
 }

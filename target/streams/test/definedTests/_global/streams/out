@@ -1,7 +1,0 @@
-<<<<<<< HEAD
-[0m[[0m[0mdebug[0m] [0m[0mSubclass fingerprints: List((org.scalatest.Suite,false,org.scalatest.tools.Framework$$anon$1@2e7e9ec1), (junit.framework.TestCase,false,com.novocode.junit.JUnit3Fingerprint@7646c8f0))[0m
-[0m[[0m[0mdebug[0m] [0m[0mAnnotation fingerprints: List((org.scalatest.WrapWith,false,org.scalatest.tools.Framework$$anon$2@682cf129), (org.junit.runner.RunWith,false,com.novocode.junit.RunWithFingerprint@327ef27b), (org.junit.Test,false,com.novocode.junit.JUnitFingerprint@723fbd8c))[0m
-=======
-[0m[[0m[0mdebug[0m] [0m[0mSubclass fingerprints: List((org.scalatest.Suite,false,org.scalatest.tools.Framework$$anon$1@16e2e0f0), (junit.framework.TestCase,false,com.novocode.junit.JUnit3Fingerprint@b202c51))[0m
-[0m[[0m[0mdebug[0m] [0m[0mAnnotation fingerprints: List((org.scalatest.WrapWith,false,org.scalatest.tools.Framework$$anon$2@233c4b15), (org.junit.runner.RunWith,false,com.novocode.junit.RunWithFingerprint@2258dae2), (org.junit.Test,false,com.novocode.junit.JUnitFingerprint@2890385c))[0m
->>>>>>> develop

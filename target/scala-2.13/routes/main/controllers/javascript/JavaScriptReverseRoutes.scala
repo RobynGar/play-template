@@ -1,6 +1,5 @@
 // @GENERATOR:play-routes-compiler
-// @SOURCE:/Users/robyn.garlington/Documents/scalaTraining/assignments/play-template/conf/routes
-// @DATE:Fri Jul 15 15:28:34 BST 2022
+// @SOURCE:conf/routes
 
 import play.api.routing.JavaScriptReverseRoute
 
@@ -9,6 +8,26 @@ import _root_.controllers.Assets.Asset
 
 // @LINE:2
 package controllers.javascript {
+
+  // @LINE:2
+  class ReverseHomeController(_prefix: => String) {
+
+    def _defaultPrefix: String = {
+      if (_prefix.endsWith("/")) "" else "/"
+    }
+
+  
+    // @LINE:2
+    def index: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.HomeController.index",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + """"})
+        }
+      """
+    )
+  
+  }
 
   // @LINE:3
   class ReverseApplicationController(_prefix: => String) {
@@ -68,7 +87,7 @@ package controllers.javascript {
       """
     )
   
-    // @LINE:18
+    // @LINE:20
     def getGoogleBook: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.ApplicationController.getGoogleBook",
       """
@@ -84,6 +103,26 @@ package controllers.javascript {
       """
         function(search0,term1) {
           return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "api/showBook/" + encodeURIComponent((""" + implicitly[play.api.mvc.PathBindable[String]].javascriptUnbind + """)("search", search0)) + "/" + encodeURIComponent((""" + implicitly[play.api.mvc.PathBindable[String]].javascriptUnbind + """)("term", term1))})
+        }
+      """
+    )
+  
+    // @LINE:13
+    def addNewBook: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.ApplicationController.addNewBook",
+      """
+        function() {
+          return _wA({method:"GET", url:"""" + _prefix + { _defaultPrefix } + """" + "api/addbook/form"})
+        }
+      """
+    )
+  
+    // @LINE:14
+    def addBookForm: JavaScriptReverseRoute = JavaScriptReverseRoute(
+      "controllers.ApplicationController.addBookForm",
+      """
+        function() {
+          return _wA({method:"POST", url:"""" + _prefix + { _defaultPrefix } + """" + "api/addbook/form"})
         }
       """
     )
@@ -130,27 +169,7 @@ package controllers.javascript {
   
   }
 
-  // @LINE:2
-  class ReverseHomeController(_prefix: => String) {
-
-    def _defaultPrefix: String = {
-      if (_prefix.endsWith("/")) "" else "/"
-    }
-
-  
-    // @LINE:2
-    def index: JavaScriptReverseRoute = JavaScriptReverseRoute(
-      "controllers.HomeController.index",
-      """
-        function() {
-          return _wA({method:"GET", url:"""" + _prefix + """"})
-        }
-      """
-    )
-  
-  }
-
-  // @LINE:15
+  // @LINE:17
   class ReverseAssets(_prefix: => String) {
 
     def _defaultPrefix: String = {
@@ -158,7 +177,7 @@ package controllers.javascript {
     }
 
   
-    // @LINE:15
+    // @LINE:17
     def versioned: JavaScriptReverseRoute = JavaScriptReverseRoute(
       "controllers.Assets.versioned",
       """

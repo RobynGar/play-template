@@ -11,6 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class LibraryConnector @Inject()(ws: WSClient) {
   def get[Response](url: String)(implicit rds: OFormat[Response], ec: ExecutionContext): EitherT[Future, APIError, DataModel] = {
     //right is the correct response (right response) left is the error path in the return statement the error is the first one declared (on the left hand side)
+    //response contains the data returned from the server
     val request = ws.url(url)
     val response = request.get()
     //above will give a WSResponse
@@ -36,7 +37,6 @@ class LibraryConnector @Inject()(ws: WSClient) {
                result.json.validate[GoogleBook] match {
                     case JsSuccess(value, _) =>
                       Right(DataModel(value.items.head.id, value.items.head.volumeInfo.title, value.items.head.volumeInfo.description, value.items.head.volumeInfo.pageCount))
-
                     case JsError(errors) =>
                       val errorMessage = errors.map {
                         case (_, es) => es.toString()

@@ -2,11 +2,13 @@ package services
 
 
 import models.{APIError, DataModel, Field}
+import play.api.data.Form
 import play.api.libs.json.{JsError, JsSuccess, JsValue, Json}
 import play.api.mvc.Request
 import repositories.{DataRepository, TraitDataRepo}
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.impl.Promise
 import scala.concurrent.{ExecutionContext, Future}
 
 
@@ -23,12 +25,18 @@ class ApplicationService @Inject()(dataRepository: TraitDataRepo)(implicit ec: E
 
 
 
-  def create(input: Request[JsValue]): Future[Either[APIError, DataModel]] = {
+  def create(implicit input: Request[JsValue]): Future[Either[APIError, DataModel]] = {
     input.body.validate[DataModel] match {
       case JsSuccess(value, _) => dataRepository.create(value)
       case JsError(errors) => Future(Left(APIError.BadAPIResponse(415, "could not make book")))
     }
+  }
 
+  def addNewBook(book: DataModel): Future[Either[APIError, DataModel]] = {
+    dataRepository.create(book).map {
+      case Left(value) => Left(APIError.BadAPIResponse(415, "could not make book"))
+      case Right(book) => Right(book)
+    }
   }
 
 
